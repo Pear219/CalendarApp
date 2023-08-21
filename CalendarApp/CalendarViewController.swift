@@ -26,7 +26,12 @@ class CalendarViewController: UIViewController, FSCalendarDelegate, FSCalendarDa
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "toProfile" {
+        if segue.identifier == "toSchedule" {
+            let next = segue.destination
+            if let sheet = next.sheetPresentationController {
+                sheet.detents = [.medium()]
+            }
+        } else if segue.identifier == "toProfile" {
             let next = segue.destination
             if let sheet = next.sheetPresentationController {
                 sheet.detents = [.medium()]
@@ -61,6 +66,7 @@ class CalendarViewController: UIViewController, FSCalendarDelegate, FSCalendarDa
                // 予定を追加するボタン
                let addPlanAction = UIAlertAction(title: "予定を追加する", style: .default) { (action) in
                    // 予定を追加するボタンが選択されたときの処理
+                   self.performSegue(withIdentifier: "toSchedule", sender: self)
                    // ここに予定を追加する処理を書く
                }
                
