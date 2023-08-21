@@ -17,6 +17,7 @@
 		415B80292A7D4D1600EC07B1 /* CalendarAppUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 415B80282A7D4D1600EC07B1 /* CalendarAppUITestsLaunchTests.swift */; };
 		415B80372A7D50C300EC07B1 /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 415B80362A7D50C300EC07B1 /* FSCalendar */; };
 		415B80392A7D515B00EC07B1 /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 415B80382A7D515B00EC07B1 /* CalendarViewController.swift */; };
+		415B803B2A83DABC00EC07B1 /* AddProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 415B803A2A83DABC00EC07B1 /* AddProfileViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +51,7 @@
 		415B80262A7D4D1600EC07B1 /* CalendarAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarAppUITests.swift; sourceTree = "<group>"; };
 		415B80282A7D4D1600EC07B1 /* CalendarAppUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarAppUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		415B80382A7D515B00EC07B1 /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
+		415B803A2A83DABC00EC07B1 /* AddProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddProfileViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +110,7 @@
 				415B80102A7D4D1600EC07B1 /* LaunchScreen.storyboard */,
 				415B80132A7D4D1600EC07B1 /* Info.plist */,
 				415B80382A7D515B00EC07B1 /* CalendarViewController.swift */,
+				415B803A2A83DABC00EC07B1 /* AddProfileViewController.swift */,
 			);
 			path = CalendarApp;
 			sourceTree = "<group>";
@@ -268,6 +271,7 @@
 			files = (
 				415B80392A7D515B00EC07B1 /* CalendarViewController.swift in Sources */,
 				415B80062A7D4D1200EC07B1 /* AppDelegate.swift in Sources */,
+				415B803B2A83DABC00EC07B1 /* AddProfileViewController.swift in Sources */,
 				415B80082A7D4D1200EC07B1 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -447,6 +451,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CalendarApp/Info.plist;
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "アイコンに使用します";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -474,6 +479,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CalendarApp/Info.plist;
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "アイコンに使用します";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;

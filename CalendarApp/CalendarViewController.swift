@@ -25,6 +25,15 @@ class CalendarViewController: UIViewController, FSCalendarDelegate, FSCalendarDa
         // Do any additional setup after loading the view.
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "toProfile" {
+            let next = segue.destination
+            if let sheet = next.sheetPresentationController {
+                sheet.detents = [.medium()]
+            }
+        }
+    }
+    
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         // カレンダーの日付が選択されたときの処理
         
@@ -47,8 +56,35 @@ class CalendarViewController: UIViewController, FSCalendarDelegate, FSCalendarDa
     }
     
     @IBAction func add() {
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+               
+               // 予定を追加するボタン
+               let addPlanAction = UIAlertAction(title: "予定を追加する", style: .default) { (action) in
+                   // 予定を追加するボタンが選択されたときの処理
+                   // ここに予定を追加する処理を書く
+               }
+               
+               // 誕生日の人を登録するボタン
+               let addBirthdayAction = UIAlertAction(title: "誕生日の人を登録する", style: .default) { (action) in
+                   // 誕生日の人を登録するボタンが選択されたときの処理
+                   self.performSegue(withIdentifier: "toProfile", sender: self)
+                   // ここに誕生日の人を登録する処理を書く
+               }
+               
+               // キャンセルボタン
+               let cancelAction = UIAlertAction(title: "キャンセル", style: .cancel, handler: nil)
+               
+               // ボタンをアラートに追加
+               alertController.addAction(addPlanAction)
+               alertController.addAction(addBirthdayAction)
+               alertController.addAction(cancelAction)
+               
+               // アラートを表示
+               present(alertController, animated: true, completion: nil)
         
+           }
     }
+
 
     /*
     // MARK: - Navigation
@@ -59,5 +95,3 @@ class CalendarViewController: UIViewController, FSCalendarDelegate, FSCalendarDa
         // Pass the selected object to the new view controller.
     }
     */
-
-}
