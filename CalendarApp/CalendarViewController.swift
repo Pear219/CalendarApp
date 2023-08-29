@@ -13,6 +13,9 @@ class CalendarViewController: UIViewController, FSCalendarDelegate, FSCalendarDa
     @IBOutlet weak var calendar: FSCalendar!
     @IBOutlet weak var tableView: UITableView!
     
+    var UD: UserDefaults = UserDefaults.standard
+    var selectedDate: String
+    
     override func viewDidLoad() {
         
         calendar.delegate = self
@@ -21,6 +24,10 @@ class CalendarViewController: UIViewController, FSCalendarDelegate, FSCalendarDa
         
         
         super.viewDidLoad()
+        
+        if let selectedDate = UD.object(forKey: "formatDate") as? String{
+            calendar.select(selectedDate)
+        }
 
         // Do any additional setup after loading the view.
     }
@@ -52,7 +59,7 @@ class CalendarViewController: UIViewController, FSCalendarDelegate, FSCalendarDa
 
     func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
         // カレンダーの日付にイベントを表示するための処理
-        return 3 // イベント数
+        return 0 // イベント数
     }
 
     func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, eventColorFor date: Date) -> UIColor? {
@@ -89,6 +96,17 @@ class CalendarViewController: UIViewController, FSCalendarDelegate, FSCalendarDa
                present(alertController, animated: true, completion: nil)
         
            }
+    
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 10
+    }
+    //一時的にメモ
+//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//
+//        return cell
+//    }
+    
     }
 
 

@@ -22,6 +22,7 @@ class AddScheduleViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
+    //dateをstring型に変える&日程が入力されたか確認
     @IBAction func dateSelected(_ sender: UIDatePicker) {
             let selectedDate = sender.date
             let dateFormatter = DateFormatter()

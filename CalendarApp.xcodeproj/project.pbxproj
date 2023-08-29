@@ -19,6 +19,10 @@
 		415B80392A7D515B00EC07B1 /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 415B80382A7D515B00EC07B1 /* CalendarViewController.swift */; };
 		415B803B2A83DABC00EC07B1 /* AddProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 415B803A2A83DABC00EC07B1 /* AddProfileViewController.swift */; };
 		4164611E2A93F86A0082E111 /* AddScheduleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4164611D2A93F8690082E111 /* AddScheduleViewController.swift */; };
+		416461202A94CDC50082E111 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4164611F2A94CDC50082E111 /* GoogleService-Info.plist */; };
+		416461232A94CEE20082E111 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 416461222A94CEE20082E111 /* FirebaseAuth */; };
+		416461252A94CEE20082E111 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 416461242A94CEE20082E111 /* FirebaseFirestore */; };
+		416461272A94CEE20082E111 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 416461262A94CEE20082E111 /* FirebaseStorage */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +58,7 @@
 		415B80382A7D515B00EC07B1 /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
 		415B803A2A83DABC00EC07B1 /* AddProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddProfileViewController.swift; sourceTree = "<group>"; };
 		4164611D2A93F8690082E111 /* AddScheduleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddScheduleViewController.swift; sourceTree = "<group>"; };
+		4164611F2A94CDC50082E111 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +67,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				415B80372A7D50C300EC07B1 /* FSCalendar in Frameworks */,
+				416461272A94CEE20082E111 /* FirebaseStorage in Frameworks */,
+				416461232A94CEE20082E111 /* FirebaseAuth in Frameworks */,
+				416461252A94CEE20082E111 /* FirebaseFirestore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -114,6 +122,7 @@
 				415B80382A7D515B00EC07B1 /* CalendarViewController.swift */,
 				415B803A2A83DABC00EC07B1 /* AddProfileViewController.swift */,
 				4164611D2A93F8690082E111 /* AddScheduleViewController.swift */,
+				4164611F2A94CDC50082E111 /* GoogleService-Info.plist */,
 			);
 			path = CalendarApp;
 			sourceTree = "<group>";
@@ -153,6 +162,9 @@
 			name = CalendarApp;
 			packageProductDependencies = (
 				415B80362A7D50C300EC07B1 /* FSCalendar */,
+				416461222A94CEE20082E111 /* FirebaseAuth */,
+				416461242A94CEE20082E111 /* FirebaseFirestore */,
+				416461262A94CEE20082E111 /* FirebaseStorage */,
 			);
 			productName = CalendarApp;
 			productReference = 415B80022A7D4D1200EC07B1 /* CalendarApp.app */;
@@ -228,6 +240,7 @@
 			mainGroup = 415B7FF92A7D4D1200EC07B1;
 			packageReferences = (
 				415B80352A7D50C200EC07B1 /* XCRemoteSwiftPackageReference "FSCalendar" */,
+				416461212A94CEE20082E111 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			productRefGroup = 415B80032A7D4D1200EC07B1 /* Products */;
 			projectDirPath = "";
@@ -246,6 +259,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				415B80122A7D4D1600EC07B1 /* LaunchScreen.storyboard in Resources */,
+				416461202A94CDC50082E111 /* GoogleService-Info.plist in Resources */,
 				415B800F2A7D4D1600EC07B1 /* Assets.xcassets in Resources */,
 				415B800D2A7D4D1200EC07B1 /* Main.storyboard in Resources */,
 			);
@@ -624,6 +638,14 @@
 				minimumVersion = 2.0.0;
 			};
 		};
+		416461212A94CEE20082E111 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 10.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -631,6 +653,21 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 415B80352A7D50C200EC07B1 /* XCRemoteSwiftPackageReference "FSCalendar" */;
 			productName = FSCalendar;
+		};
+		416461222A94CEE20082E111 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 416461212A94CEE20082E111 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		416461242A94CEE20082E111 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 416461212A94CEE20082E111 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+		416461262A94CEE20082E111 /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 416461212A94CEE20082E111 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
