@@ -23,6 +23,9 @@
 		416461232A94CEE20082E111 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 416461222A94CEE20082E111 /* FirebaseAuth */; };
 		416461252A94CEE20082E111 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 416461242A94CEE20082E111 /* FirebaseFirestore */; };
 		416461272A94CEE20082E111 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 416461262A94CEE20082E111 /* FirebaseStorage */; };
+		4164612A2A9DF2340082E111 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 416461292A9DF2340082E111 /* GoogleSignIn */; };
+		4164612C2A9DF2340082E111 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 4164612B2A9DF2340082E111 /* GoogleSignInSwift */; };
+		4164612E2A9DF30D0082E111 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4164612D2A9DF30D0082E111 /* LoginViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +62,7 @@
 		415B803A2A83DABC00EC07B1 /* AddProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddProfileViewController.swift; sourceTree = "<group>"; };
 		4164611D2A93F8690082E111 /* AddScheduleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddScheduleViewController.swift; sourceTree = "<group>"; };
 		4164611F2A94CDC50082E111 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		4164612D2A9DF30D0082E111 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,8 +70,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4164612A2A9DF2340082E111 /* GoogleSignIn in Frameworks */,
 				415B80372A7D50C300EC07B1 /* FSCalendar in Frameworks */,
 				416461272A94CEE20082E111 /* FirebaseStorage in Frameworks */,
+				4164612C2A9DF2340082E111 /* GoogleSignInSwift in Frameworks */,
 				416461232A94CEE20082E111 /* FirebaseAuth in Frameworks */,
 				416461252A94CEE20082E111 /* FirebaseFirestore in Frameworks */,
 			);
@@ -123,6 +129,7 @@
 				415B803A2A83DABC00EC07B1 /* AddProfileViewController.swift */,
 				4164611D2A93F8690082E111 /* AddScheduleViewController.swift */,
 				4164611F2A94CDC50082E111 /* GoogleService-Info.plist */,
+				4164612D2A9DF30D0082E111 /* LoginViewController.swift */,
 			);
 			path = CalendarApp;
 			sourceTree = "<group>";
@@ -165,6 +172,8 @@
 				416461222A94CEE20082E111 /* FirebaseAuth */,
 				416461242A94CEE20082E111 /* FirebaseFirestore */,
 				416461262A94CEE20082E111 /* FirebaseStorage */,
+				416461292A9DF2340082E111 /* GoogleSignIn */,
+				4164612B2A9DF2340082E111 /* GoogleSignInSwift */,
 			);
 			productName = CalendarApp;
 			productReference = 415B80022A7D4D1200EC07B1 /* CalendarApp.app */;
@@ -241,6 +250,7 @@
 			packageReferences = (
 				415B80352A7D50C200EC07B1 /* XCRemoteSwiftPackageReference "FSCalendar" */,
 				416461212A94CEE20082E111 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				416461282A9DF2330082E111 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 			);
 			productRefGroup = 415B80032A7D4D1200EC07B1 /* Products */;
 			projectDirPath = "";
@@ -286,6 +296,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4164612E2A9DF30D0082E111 /* LoginViewController.swift in Sources */,
 				415B80392A7D515B00EC07B1 /* CalendarViewController.swift in Sources */,
 				415B80062A7D4D1200EC07B1 /* AppDelegate.swift in Sources */,
 				4164611E2A93F86A0082E111 /* AddScheduleViewController.swift in Sources */,
@@ -475,6 +486,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -503,6 +515,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -646,6 +659,14 @@
 				minimumVersion = 10.0.0;
 			};
 		};
+		416461282A9DF2330082E111 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -668,6 +689,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 416461212A94CEE20082E111 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseStorage;
+		};
+		416461292A9DF2340082E111 /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 416461282A9DF2330082E111 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
+		4164612B2A9DF2340082E111 /* GoogleSignInSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 416461282A9DF2330082E111 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignInSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

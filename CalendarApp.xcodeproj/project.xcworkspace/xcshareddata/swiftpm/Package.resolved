@@ -10,12 +10,21 @@
       }
     },
     {
+      "identity" : "appauth-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/openid/AppAuth-iOS.git",
+      "state" : {
+        "revision" : "71cde449f13d453227e687458144bde372d30fc7",
+        "version" : "1.6.2"
+      }
+    },
+    {
       "identity" : "firebase-ios-sdk",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/firebase/firebase-ios-sdk",
       "state" : {
-        "revision" : "df2171b0c6afb9e9d4f7e07669d558c510b9f6be",
-        "version" : "10.13.0"
+        "revision" : "2bfe6abe1014aafe5cf28401708f7d39f9926a76",
+        "version" : "10.14.0"
       }
     },
     {
@@ -46,6 +55,15 @@
       }
     },
     {
+      "identity" : "googlesignin-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/google/GoogleSignIn-iOS",
+      "state" : {
+        "revision" : "7932d33686c1dc4d7df7a919aae47361d1cdfda4",
+        "version" : "7.0.0"
+      }
+    },
+    {
       "identity" : "googleutilities",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/GoogleUtilities.git",
@@ -70,6 +88,24 @@
       "state" : {
         "revision" : "d415594121c9e8a4f9d79cecee0965cf35e74dbd",
         "version" : "3.1.1"
+      }
+    },
+    {
+      "identity" : "gtmappauth",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/google/GTMAppAuth.git",
+      "state" : {
+        "revision" : "cee3c709307912d040bd1e06ca919875a92339c6",
+        "version" : "2.0.0"
+      }
+    },
+    {
+      "identity" : "interop-ios-for-google-sdks",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/google/interop-ios-for-google-sdks.git",
+      "state" : {
+        "revision" : "2d12673670417654f08f5f90fdd62926dc3a2648",
+        "version" : "100.0.0"
       }
     },
     {

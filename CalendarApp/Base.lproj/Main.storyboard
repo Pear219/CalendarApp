@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="2kO-x8-e6W">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Fk8-xp-Zmk">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
@@ -220,10 +220,38 @@
             </objects>
             <point key="canvasLocation" x="1249.6183206106871" y="698.59154929577471"/>
         </scene>
+        <!--Login View Controller-->
+        <scene sceneID="mbA-QZ-cRx">
+            <objects>
+                <viewController id="Fk8-xp-Zmk" customClass="LoginViewController" customModule="CalendarApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Aay-4h-I2V">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5K6-Da-YRL">
+                                <rect key="frame" x="150" y="289" width="94" height="155"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="ログイン"/>
+                                <connections>
+                                    <action selector="login:" destination="Fk8-xp-Zmk" eventType="touchUpInside" id="9vG-lp-DkG"/>
+                                    <action selector="login:" destination="2tb-Db-gaZ" eventType="touchUpInside" id="JiB-j9-0FO"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="Aq5-4G-ZnM"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="TdF-xE-Os5" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <exit id="2tb-Db-gaZ" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="-1524.4274809160304" y="-20.422535211267608"/>
+        </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="aeY-DU-AGb">
             <objects>
-                <tabBarController id="2kO-x8-e6W" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="tabBar" id="2kO-x8-e6W" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="TY4-qZ-DwH"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="E8R-On-VaZ">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="49"/>

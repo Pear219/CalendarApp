@@ -14,7 +14,7 @@ class CalendarViewController: UIViewController, FSCalendarDelegate, FSCalendarDa
     @IBOutlet weak var tableView: UITableView!
     
     var UD: UserDefaults = UserDefaults.standard
-    var selectedDate: String
+    var selectedDate: String = ""
     
     override func viewDidLoad() {
         
@@ -25,11 +25,14 @@ class CalendarViewController: UIViewController, FSCalendarDelegate, FSCalendarDa
         
         super.viewDidLoad()
         
+
+
+        // Do any additional setup after loading the view.
+    }
+    override func viewWillAppear(_ animated: Bool) {
         if let selectedDate = UD.object(forKey: "formatDate") as? String{
             calendar.select(selectedDate)
         }
-
-        // Do any additional setup after loading the view.
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
