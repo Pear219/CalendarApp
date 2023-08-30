@@ -7,6 +7,7 @@
 
 import UIKit
 import SwiftUI
+import Firebase
 
 class AddProfileViewController: UIViewController, UIImagePickerControllerDelegate & UINavigationControllerDelegate {
     
@@ -67,7 +68,7 @@ class AddProfileViewController: UIViewController, UIImagePickerControllerDelegat
             UD.set(name, forKey: "birthdayName")
             if let noteText = note.text, !noteText.isEmpty {
                 UD.set(noteText, forKey: "note")
-                if let selectedDate = UD.object(forKey: "dateSelected") as? String, !selectedDate.isEmpty {
+                if let selectedDate = UD.object(forKey: "dateSelected") as? String, !selectedDate.isEmpty {//ちゃんと選択し終わったか確認
                     UD.set(formattedDate, forKey: "formattedDate")
                     UD.removeObject(forKey: "dateSelected")
                     if let selectedImage = selectedPhoto.image {

@@ -14,6 +14,17 @@ import Firebase
 class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
+        //既にログイン時
+                if let user = Auth.auth().currentUser {
+                    print("user: \(user.uid)")
+
+        //画面遷移をかく
+                    let storyboard: UIStoryboard = self.storyboard!
+                    let next = storyboard.instantiateViewController(withIdentifier: "tabBar") as! UITabBarController
+                    next.modalPresentationStyle = .fullScreen
+                    self.present(next, animated: true, completion: nil)
+                }
+        
         super.viewDidLoad()
         
         // Firebase初期化
@@ -60,17 +71,13 @@ class LoginViewController: UIViewController {
                             
                             print("ログイン完了 name:" + name)
                             
-                            //ここに画面
+                            //ここに画面遷移
                             let storyboard: UIStoryboard = self.storyboard!
                             let next = storyboard.instantiateViewController(withIdentifier: "tabBar") as! UITabBarController
                             next.modalPresentationStyle = .fullScreen
                             self.present(next, animated: true, completion: nil)
-                            
-                            
                         }
-                        
                     }
-                                                                                                       
                     ) }
             }
         }

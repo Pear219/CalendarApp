@@ -30,9 +30,14 @@ class CalendarViewController: UIViewController, FSCalendarDelegate, FSCalendarDa
         // Do any additional setup after loading the view.
     }
     override func viewWillAppear(_ animated: Bool) {
-        if let selectedDate = UD.object(forKey: "formatDate") as? String{
-            calendar.select(selectedDate)
-        }
+        if let selectedDateStr = UD.object(forKey: "formatDate") as? String {
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "yyyy-MM-dd"  // こちらのフォーマットは実際のフォーマットに合わせて変更してください。
+                    
+                    if let selectedDate = dateFormatter.date(from: selectedDateStr) {
+                        calendar.select(selectedDate)
+                    }
+                }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
