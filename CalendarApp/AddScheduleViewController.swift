@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Firebase
 
 class AddScheduleViewController: UIViewController {
     
@@ -15,6 +16,7 @@ class AddScheduleViewController: UIViewController {
     var formatDate: String = ""
 
     var UD: UserDefaults = UserDefaults.standard
+    let fireStore = Firestore.firestore()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,21 +43,32 @@ class AddScheduleViewController: UIViewController {
     }
     
     @IBAction func close() {
-        if let title = titleText.text, !title.isEmpty {
-            UD.set(title, forKey: "title")
-            if let scheduleTouched = UD.object(forKey: "scheduleSelected")as?String, !scheduleTouched.isEmpty {
-                UD.set(formatDate, forKey: "formatDate")
-                UD.removeObject(forKey: "scheduleSelected")
-                print("入力したのは", title, formatDate)
-                self.dismiss(animated: true, completion: nil)
+        if let title = titleText.text, !title.isEmpty,
+        let scheduleTouched = UD.object(forKey: "scheduleSelected")as?String, !scheduleTouched.isEmpty{
+            if let currentUserUID = Auth.auth().currentUser?.uid {
+                let userData = [
+                    "title": title,
+                    "date": formatDate]
+                let userDocRef = self.fireStore.collection("user").document(currentUserUID)
+                let scheduleCollectionRef = userDocRef.collection("schedule")
+                scheduleCollectionRef.addDocument(data: userData) { error in
+                    if let error = error {
+                        print("データを保存できませんでした: \(error.localizedDescription)")
+                    } else {
+                        print("データが正常に保存されました")
+                        // 画面を閉じるなどの追加の処理を行うことができます
+                        self.dismiss(animated: true, completion: nil)
+                        self.UD.removeObject(forKey: "scheduleSelected")
+                        print("入力したのは", title, self.formatDate)
+                    }
+                }
             } else {
-                alert()
+                print("ユーザーがログインしていません")
             }
         } else {
             alert()
         }
     }
-    
 
     /*
     // MARK: - Navigation

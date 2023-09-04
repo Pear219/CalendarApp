@@ -8,6 +8,7 @@
 import UIKit
 import SwiftUI
 import Firebase
+import FirebaseStorage
 
 class AddProfileViewController: UIViewController, UIImagePickerControllerDelegate & UINavigationControllerDelegate {
     
@@ -19,6 +20,10 @@ class AddProfileViewController: UIViewController, UIImagePickerControllerDelegat
     var UD: UserDefaults = UserDefaults.standard
     
     var formattedDate: String = ""
+    
+    // Firebase Firestoreの参照を取得
+    let fireStore = Firestore.firestore()
+    let storage = Storage.storage()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,36 +67,68 @@ class AddProfileViewController: UIViewController, UIImagePickerControllerDelegat
         present(alert, animated: true, completion: nil)
     }
     
-    @IBAction func close() {
-        if let name = birthdayName.text, !name.isEmpty {
-            print("名前は", name)
-            UD.set(name, forKey: "birthdayName")
-            if let noteText = note.text, !noteText.isEmpty {
-                UD.set(noteText, forKey: "note")
-                if let selectedDate = UD.object(forKey: "dateSelected") as? String, !selectedDate.isEmpty {//ちゃんと選択し終わったか確認
-                    UD.set(formattedDate, forKey: "formattedDate")
-                    UD.removeObject(forKey: "dateSelected")
-                    if let selectedImage = selectedPhoto.image {
-                        // 画像をDataに変換してUserDefaultsに保存する
-                        if let imageData = selectedImage.jpegData(compressionQuality: 1.0) {
-                            UD.set(imageData, forKey: "selectedPhoto")
-                        }
-                            print(noteText, name, formattedDate)
-                            self.dismiss(animated: true, completion: nil)
-                    } else {
-                        alert()
-                    }
-                } else {
-                    alert()
-                }
-            } else {
-                alert()
+    func uploadImageToFirebaseStorage(image: UIImage, completion: @escaping (String) -> Void) {
+            guard let imageData = image.jpegData(compressionQuality: 0.5) else {
+                return
             }
-        } else {
-            alert()
-        }
-    }
+            
+            let storageRef = storage.reference().child("images/\(UUID().uuidString).jpg")
 
+            storageRef.putData(imageData, metadata: nil) { (metadata, error) in
+                if let error = error {
+                    print("画像のアップロードに失敗しました: \(error.localizedDescription)")
+                } else {
+                    // アップロード成功時にダウンロードURLを取得してFirestoreに保存
+                    storageRef.downloadURL { (url, error) in
+                        if let imageUrl = url?.absoluteString {
+                            completion(imageUrl)
+                        }
+                    }
+                }
+            }
+        }
+
+    @IBAction func close() {
+           if let name = birthdayName.text, !name.isEmpty,
+              let noteText = note.text, !noteText.isEmpty,
+              let selectedDate = UD.object(forKey: "dateSelected") as? String, !selectedDate.isEmpty,
+              let selectImage = selectedPhoto.image { // formattedDateが空でないことを確認
+
+               uploadImageToFirebaseStorage(image: selectImage) { imageUrl in
+                               if let currentUserUID = Auth.auth().currentUser?.uid {
+                                   // Firestoreにデータを保存するコードをここに追加
+                                   let userData = [
+                                       "name": name,
+                                       "note": noteText,
+                                       "date": self.formattedDate,
+                                       "imageUrl": imageUrl
+                                   ]
+                                   let userDocRef = self.fireStore.collection("user").document(currentUserUID)
+                                   let friendProfileCollectionRef = userDocRef.collection("friendProfile")
+
+                                   friendProfileCollectionRef.addDocument(data: userData) { error in
+                                       if let error = error {
+                                           print("データを保存できませんでした: \(error.localizedDescription)")
+                                       } else {
+                                           print("データが正常に保存されました")
+
+                                           // 画面を閉じるなどの追加の処理を行うことができます
+                                           self.dismiss(animated: true, completion: nil)
+                                           UserDefaults.standard.removeObject(forKey: "dateSelected")
+                                       }
+                                   }
+                               } else {
+                                   print("ユーザーがログインしていません")
+                               }
+                           }
+                       } else {
+               alert()
+           }
+       }
+    
+    
+    
+    
     
 
     /*

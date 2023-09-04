@@ -7,20 +7,24 @@
 
 import UIKit
 import FSCalendar
+import Firebase
 
-class CalendarViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource {
+class CalendarViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet weak var calendar: FSCalendar!
     @IBOutlet weak var tableView: UITableView!
     
     var UD: UserDefaults = UserDefaults.standard
     var selectedDate: String = ""
+    var schedules: [String] = [] // スケジュールを保持する配列
     
     override func viewDidLoad() {
         
         calendar.delegate = self
         calendar.dataSource = self
         tableView.isHidden = true
+        tableView.delegate = self
+        tableView.dataSource = self
         
         
         super.viewDidLoad()
@@ -54,21 +58,75 @@ class CalendarViewController: UIViewController, FSCalendarDelegate, FSCalendarDa
         }
     }
     
+    func fetchScheduleForSelectedDate(selectedDate: String) {
+            let fireStore = Firestore.firestore()
+            let user = Auth.auth().currentUser // 現在のユーザーを取得
+            if let userUID = user?.uid {
+                // ランダムなスケジュールドキュメントIDを指定してクエリを作成
+                let scheduleCollection = fireStore.collection("user").document(userUID).collection("schedule")
+                
+                scheduleCollection.whereField("date", isEqualTo: selectedDate).getDocuments { (querySnapshot, error) in
+                    if let error = error {
+                        print("データ取得エラー: \(error.localizedDescription)")
+                        return
+                    }
+                    
+                    guard let documents = querySnapshot?.documents else {
+                        print("該当するドキュメントがありません")
+                        return
+                    }
+                    
+                    // スケジュールを保持する配列をクリア
+                    self.schedules.removeAll()
+                    
+                    // 取得したスケジュールを直接テーブルビューに表示
+                    var scheduleTitles: [String] = []
+                    for document in documents {
+                        if let title = document.data()["title"] as? String {
+                            scheduleTitles.append(title)
+                        }
+                    }
+                    self.schedules = scheduleTitles
+                    
+                    // テーブルビューをリロードして表示を更新
+                    self.tableView.reloadData()
+                }
+            }
+        }
+    
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         // カレンダーの日付が選択されたときの処理
         
         tableView.isHidden = false // UITableViewを表示する
+        
+        let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy年MM月dd日"
+                selectedDate = dateFormatter.string(from: date)
+                
+                // Firestoreからスケジュールを取得
+                fetchScheduleForSelectedDate(selectedDate: selectedDate)
     }
     
     func calendar(_ calendar: FSCalendar, didDeselect date: Date, at monthPosition: FSCalendarMonthPosition) {
         // カレンダーの日付が選択解除されたときの処理
         tableView.isHidden = true // UITableViewを非表示にする
+        
     }
 
     func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
         // カレンダーの日付にイベントを表示するための処理
         return 0 // イベント数
     }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+            return schedules.count
+        }
+        
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "CellIdentifier", for: indexPath)
+            cell.textLabel?.text = schedules[indexPath.row]
+            return cell
+        }
 
     func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, eventColorFor date: Date) -> UIColor? {
         // カレンダーの日付に表示されるイベントの色を設定する処理
@@ -105,10 +163,6 @@ class CalendarViewController: UIViewController, FSCalendarDelegate, FSCalendarDa
         
            }
     
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
-    }
     //一時的にメモ
 //    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 //
