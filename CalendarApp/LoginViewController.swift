@@ -14,6 +14,8 @@ import Firebase
 
 class LoginViewController: UIViewController {
     
+    @IBOutlet var login: UIButton!
+    
     override func viewDidLoad() {
         //既にログイン時
                 if let user = Auth.auth().currentUser {
@@ -27,6 +29,12 @@ class LoginViewController: UIViewController {
                 }
         
         super.viewDidLoad()
+        
+        login.layer.cornerRadius = 10
+        login.layer.shadowRadius = 3
+        login.layer.shadowOpacity = 0.1
+        login.layer.shadowColor = UIColor.black.cgColor
+        login.layer.shadowOffset = CGSize(width: 2, height: 2)
         
         // Firebase初期化
         //  FirebaseApp.configure()

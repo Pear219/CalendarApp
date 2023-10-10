@@ -17,6 +17,9 @@ class CalendarViewController: UIViewController, FSCalendarDelegate, FSCalendarDa
     var UD: UserDefaults = UserDefaults.standard
     var selectedDate: String = ""
     var schedules: [String] = [] // スケジュールを保持する配列
+    var birthdays: [String] = [] // 誕生日の人の名前を保持する配列
+    var plans: [String] = [] // 予定のタイトルを保持する配列
+
     
     override func viewDidLoad() {
         
@@ -26,10 +29,7 @@ class CalendarViewController: UIViewController, FSCalendarDelegate, FSCalendarDa
         tableView.delegate = self
         tableView.dataSource = self
         
-        
         super.viewDidLoad()
-        
-
 
         // Do any additional setup after loading the view.
     }
@@ -58,7 +58,7 @@ class CalendarViewController: UIViewController, FSCalendarDelegate, FSCalendarDa
         }
     }
     
-    func fetchScheduleForSelectedDate(selectedDate: String) {
+    func fetchScheduleForSelectedDate(selectedDate: String) { //日付の部分が選択された時
             let fireStore = Firestore.firestore()
             let user = Auth.auth().currentUser // 現在のユーザーを取得
             if let userUID = user?.uid {

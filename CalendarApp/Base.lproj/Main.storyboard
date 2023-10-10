@@ -20,7 +20,7 @@
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fN3-Vr-BwT" customClass="FSCalendar">
                                 <rect key="frame" x="16" y="107" width="361" height="343"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <color key="backgroundColor" red="0.94117647410000005" green="0.96078431610000004" blue="0.98823523520000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="nz0-o7-dAk">
                                 <rect key="frame" x="16" y="458" width="361" height="280"/>
@@ -37,25 +37,19 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
-                            <navigationBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6fD-nz-s4P">
-                                <rect key="frame" x="0.0" y="59" width="393" height="44"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                <items>
-                                    <navigationItem title="Title" id="cX2-G4-AUX">
-                                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="Uht-nt-mB4">
-                                            <connections>
-                                                <action selector="add" destination="BYZ-38-t0r" id="LCJ-go-cCN"/>
-                                            </connections>
-                                        </barButtonItem>
-                                    </navigationItem>
-                                </items>
-                            </navigationBar>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" red="0.94117647410000005" green="0.96078431610000004" blue="0.98823523520000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="カレンダー" image="calendar" catalog="system" selectedImage="calendar" id="A7i-VP-RMC"/>
                     <toolbarItems/>
+                    <navigationItem key="navigationItem" id="aJ0-7J-gJI">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="9b2-yA-Saf">
+                            <connections>
+                                <action selector="add" destination="BYZ-38-t0r" id="yXC-FF-K95"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="calendar" destination="fN3-Vr-BwT" id="0pU-Rw-V8N"/>
@@ -151,7 +145,7 @@
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="fgy-8k-Wku"/>
-                        <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
+                        <color key="backgroundColor" red="0.94117647058823528" green="0.96078431372549022" blue="0.9882352941176471" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                     </view>
                     <connections>
                         <outlet property="birthday" destination="EFd-7j-Ia6" id="L5j-pV-GQ5"/>
@@ -172,14 +166,19 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="gqC-rf-byT">
                         <rect key="frame" x="0.0" y="59" width="393" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" red="0.62352941179999999" green="0.84705882349999995" blue="0.91764705879999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <navigationBarAppearance key="standardAppearance"/>
+                        <navigationBarAppearance key="scrollEdgeAppearance">
+                            <color key="backgroundColor" red="0.62352941179999999" green="0.84705882349999995" blue="0.91764705879999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </navigationBarAppearance>
                     </navigationBar>
                     <connections>
-                        <segue destination="Xkh-AT-Eda" kind="relationship" relationship="rootViewController" id="LuZ-DA-uTj"/>
+                        <segue destination="Xkh-AT-Eda" kind="relationship" relationship="rootViewController" id="hzx-U9-yYM"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uRd-n7-l8x" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-605" y="1377"/>
+            <point key="canvasLocation" x="-596" y="1377"/>
         </scene>
         <!--Item-->
         <scene sceneID="XCW-Dy-Fe1">
@@ -199,7 +198,8 @@
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="AhF-cl-L5Z">
                                 <rect key="frame" x="0.0" y="103" width="393" height="666"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <color key="backgroundColor" red="0.94117647410000005" green="0.96078431610000004" blue="0.98823523520000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <color key="sectionIndexBackgroundColor" red="0.94117647410000005" green="0.96078431610000004" blue="0.98823523520000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="Cell" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" id="qGU-Tn-K9L">
                                         <rect key="frame" x="0.0" y="50" width="393" height="43.666667938232422"/>
@@ -213,7 +213,7 @@
                             </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="oCm-vt-8VC"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" red="0.94117647410000005" green="0.96078431610000004" blue="0.98823523520000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Item" selectedImage="list.bullet" catalog="system" id="ibn-8j-xD9"/>
                     <navigationItem key="navigationItem" id="Mx3-rM-gNh"/>
@@ -249,6 +249,7 @@
                                 <rect key="frame" x="0.0" y="154" width="393" height="609"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <color key="sectionIndexBackgroundColor" red="0.94117647410000005" green="0.96078431610000004" blue="0.98823523520000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="presentCell" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="presentCell" id="7Zj-PM-4Re">
                                         <rect key="frame" x="0.0" y="50" width="393" height="43.666667938232422"/>
@@ -277,12 +278,34 @@
                         <outlet property="segmentControl" destination="uaQ-iQ-qIG" id="12H-cn-UNJ"/>
                         <outlet property="tableView" destination="awh-XG-kg6" id="ekw-1v-vhX"/>
                         <segue destination="4e8-yc-ZMn" kind="presentation" identifier="toGiven" id="Q5n-0Q-nDb"/>
-                        <segue destination="zf4-2N-zeK" kind="show" identifier="toGive" id="Raj-C6-mme"/>
+                        <segue destination="zf4-2N-zeK" kind="presentation" identifier="toGive" id="Raj-C6-mme"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7JW-4F-tKw" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1250" y="1377"/>
+        </scene>
+        <!--カレンダー-->
+        <scene sceneID="G6m-wg-vBS">
+            <objects>
+                <navigationController id="mPd-7f-Bbt" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="カレンダー" image="calendar" catalog="system" id="8I3-lh-Bdc"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="2is-Ts-EZV">
+                        <rect key="frame" x="0.0" y="59" width="393" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" red="0.62352941179999999" green="0.84705882349999995" blue="0.91764705879999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <navigationBarAppearance key="standardAppearance"/>
+                        <navigationBarAppearance key="scrollEdgeAppearance">
+                            <color key="backgroundColor" red="0.62352941179999999" green="0.84705882349999995" blue="0.91764705879999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </navigationBarAppearance>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="bB2-vi-KnT"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="HSJ-rh-D7P" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-596" y="-20"/>
         </scene>
         <!--Add Schedule View Controller-->
         <scene sceneID="3VK-T3-se0">
@@ -330,7 +353,7 @@
                             </textField>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="1IE-ah-tIg"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                     </view>
                     <connections>
                         <outlet property="schedule" destination="R85-zT-Oy9" id="k14-q7-Pdj"/>
@@ -339,7 +362,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FEs-aD-ZcC" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1249.6183206106871" y="698.59154929577471"/>
+            <point key="canvasLocation" x="1250" y="644"/>
         </scene>
         <!--Login View Controller-->
         <scene sceneID="mbA-QZ-cRx">
@@ -356,14 +379,14 @@
                                 <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Googleでログインする">
-                                    <fontDescription key="titleFontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                                    <fontDescription key="titleFontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="16"/>
                                 </buttonConfiguration>
                                 <connections>
                                     <action selector="login:" destination="Fk8-xp-Zmk" eventType="touchUpInside" id="9vG-lp-DkG"/>
                                     <action selector="login:" destination="2tb-Db-gaZ" eventType="touchUpInside" id="JiB-j9-0FO"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="HBDay" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nQe-2R-WDA">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Welcome to HBDay" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nQe-2R-WDA">
                                 <rect key="frame" x="55" y="260" width="283" height="36"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="30"/>
@@ -372,8 +395,11 @@
                             </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Aq5-4G-ZnM"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" red="0.94205244597839133" green="0.96078431372549022" blue="0.98431372549019602" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                     </view>
+                    <connections>
+                        <outlet property="login" destination="5K6-Da-YRL" id="cU6-eT-K76"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TdF-xE-Os5" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="2tb-Db-gaZ" userLabel="Exit" sceneMemberID="exit"/>
@@ -391,13 +417,13 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>
                     <connections>
-                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="viewControllers" id="lOg-Zh-A06"/>
-                        <segue destination="YPu-oM-CEO" kind="relationship" relationship="viewControllers" id="uUE-xl-rAI"/>
+                        <segue destination="mPd-7f-Bbt" kind="relationship" relationship="viewControllers" id="ivF-Ec-DXd"/>
+                        <segue destination="YPu-oM-CEO" kind="relationship" relationship="viewControllers" id="UyZ-yk-IXR"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0vb-5n-LKO" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-509" y="-20"/>
+            <point key="canvasLocation" x="-1524" y="644"/>
         </scene>
         <!--Given Present View Controller-->
         <scene sceneID="Cb4-kF-GRj">
@@ -495,7 +521,7 @@
                             </textField>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="7j6-M1-zuX"/>
-                        <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
+                        <color key="backgroundColor" red="0.94117647410000005" green="0.96078431610000004" blue="0.98823523520000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                     </view>
                     <navigationItem key="navigationItem" id="WEe-v3-Wns"/>
                     <connections>
@@ -511,16 +537,16 @@
             </objects>
             <point key="canvasLocation" x="2229.770992366412" y="1376.7605633802818"/>
         </scene>
-        <!--View Controller-->
+        <!--Gave Present View Controller-->
         <scene sceneID="N4Q-2u-5zd">
             <objects>
-                <viewController modalPresentationStyle="formSheet" id="zf4-2N-zeK" sceneMemberID="viewController">
+                <viewController modalPresentationStyle="formSheet" id="zf4-2N-zeK" customClass="GavePresentViewController" customModule="CalendarApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="xgp-is-QDT">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="名前" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tds-6x-OO8">
-                                <rect key="frame" x="207" y="136" width="35" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="プレゼントの名前" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tds-6x-OO8">
+                                <rect key="frame" x="207" y="136" width="139" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
@@ -543,7 +569,7 @@
                                 <rect key="frame" x="207" y="257" width="141" height="39"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <connections>
-                                    <action selector="dateSelected:" destination="zf4-2N-zeK" eventType="valueChanged" id="NPD-TV-zNh"/>
+                                    <action selector="dateSelected:" destination="zf4-2N-zeK" eventType="valueChanged" id="lt0-B8-bC3"/>
                                 </connections>
                             </datePicker>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aYO-xU-ICm">
@@ -573,7 +599,7 @@
                                     </attributedString>
                                 </buttonConfiguration>
                                 <connections>
-                                    <action selector="selectPhoto" destination="zf4-2N-zeK" eventType="touchUpInside" id="2NN-zF-Mjt"/>
+                                    <action selector="selectPhoto" destination="zf4-2N-zeK" eventType="touchUpInside" id="Wl8-2h-74g"/>
                                 </connections>
                             </button>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="5cS-Gu-J0B">
@@ -589,7 +615,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <buttonConfiguration key="configuration" style="plain" title="保存"/>
                                 <connections>
-                                    <action selector="close" destination="zf4-2N-zeK" eventType="touchUpInside" id="avO-6x-bnQ"/>
+                                    <action selector="close" destination="zf4-2N-zeK" eventType="touchUpInside" id="TM8-hn-0xa"/>
                                 </connections>
                             </button>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6k2-gY-c00">
@@ -607,14 +633,16 @@
                             </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="5iQ-9b-lnz"/>
-                        <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
+                        <color key="backgroundColor" red="0.94117647410000005" green="0.96078431610000004" blue="0.98823523520000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                     </view>
                     <navigationItem key="navigationItem" id="eXR-Eb-JJu"/>
                     <connections>
-                        <outlet property="birthday" destination="yNx-Kl-qXF" id="SnO-LQ-z6j"/>
-                        <outlet property="birthdayName" destination="Ki9-hR-qj4" id="dXO-LC-B3w"/>
-                        <outlet property="note" destination="5cS-Gu-J0B" id="Hg2-9T-K4n"/>
-                        <outlet property="selectedPhoto" destination="aYO-xU-ICm" id="fKg-he-8eD"/>
+                        <outlet property="datePicker" destination="yNx-Kl-qXF" id="ibl-5T-Fck"/>
+                        <outlet property="note" destination="5cS-Gu-J0B" id="M4M-XH-j9B"/>
+                        <outlet property="photo" destination="aYO-xU-ICm" id="2cB-WN-kVR"/>
+                        <outlet property="presentName" destination="Ki9-hR-qj4" id="QDU-hi-saP"/>
+                        <outlet property="selectButton" destination="hc2-Vw-kGb" id="FUy-JK-Tcz"/>
+                        <outlet property="toGive" destination="6k2-gY-c00" id="lWg-j9-GRu"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jdz-9W-DWo" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -627,9 +655,6 @@
         <image name="list.bullet" catalog="system" width="128" height="87"/>
         <systemColor name="labelColor">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="secondarySystemBackgroundColor">
-            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

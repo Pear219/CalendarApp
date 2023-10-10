@@ -31,6 +31,10 @@ class AddProfileViewController: UIViewController, UIImagePickerControllerDelegat
         // Do any additional setup after loading the view.
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+       
+    }
+    
     @IBAction func dateSelected(_ sender: UIDatePicker) {
             let selectedDate = sender.date
             let dateFormatter = DateFormatter()
@@ -67,6 +71,13 @@ class AddProfileViewController: UIViewController, UIImagePickerControllerDelegat
         present(alert, animated: true, completion: nil)
     }
     
+    func alreadyName() {
+        let alert: UIAlertController = UIAlertController(title: "同じ名前の友達がすでに存在しています", message: "別の名前を入力してください", preferredStyle: .alert)
+        alert.addAction(
+            UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
+    
     func uploadImageToFirebaseStorage(image: UIImage, completion: @escaping (String) -> Void) {
             guard let imageData = image.jpegData(compressionQuality: 0.5) else {
                 return
@@ -87,46 +98,59 @@ class AddProfileViewController: UIViewController, UIImagePickerControllerDelegat
                 }
             }
         }
-
+    
     @IBAction func close() {
-           if let name = birthdayName.text, !name.isEmpty,
-              let noteText = note.text, !noteText.isEmpty,
-              let selectedDate = UD.object(forKey: "dateSelected") as? String, !selectedDate.isEmpty,
-              let selectImage = selectedPhoto.image { // formattedDateが空でないことを確認
+        if let name = birthdayName.text, !name.isEmpty,
+            let noteText = note.text, !noteText.isEmpty,
+            let selectedDate = UD.object(forKey: "dateSelected") as? String, !selectedDate.isEmpty,
+            let selectImage = selectedPhoto.image { // formattedDateが空でないことを確認
 
-               uploadImageToFirebaseStorage(image: selectImage) { imageUrl in
-                               if let currentUserUID = Auth.auth().currentUser?.uid {
-                                   // Firestoreにデータを保存するコードをここに追加
-                                   let userData = [
-                                       "name": name,
-                                       "note": noteText,
-                                       "date": self.formattedDate,
-                                       "imageUrl": imageUrl
-                                   ]
-                                   let userDocRef = self.fireStore.collection("user").document(currentUserUID)
-                                   let friendProfileCollectionRef = userDocRef.collection("friendProfile")
+            // Firestoreでユーザーの友達プロファイルを取得
+            if let currentUserUID = Auth.auth().currentUser?.uid {
+                let userDocRef = fireStore.collection("user").document(currentUserUID)
+                let friendProfileCollectionRef = userDocRef.collection("friendProfile")
 
-                                   friendProfileCollectionRef.addDocument(data: userData) { error in
-                                       if let error = error {
-                                           print("データを保存できませんでした: \(error.localizedDescription)")
-                                       } else {
-                                           print("データが正常に保存されました")
+                // 同じ名前の友達が存在しないか確認
+                friendProfileCollectionRef.whereField("name", isEqualTo: name).getDocuments { (querySnapshot, error) in
+                    if let error = error {
+                        print("データを取得できませんでした: \(error.localizedDescription)")
+                        return
+                    }
 
-                                           // 画面を閉じるなどの追加の処理を行うことができます
-                                           self.dismiss(animated: true, completion: nil)
-                                           UserDefaults.standard.removeObject(forKey: "dateSelected")
-                                       }
-                                   }
-                               } else {
-                                   print("ユーザーがログインしていません")
-                               }
-                           }
-                       } else {
-               alert()
-           }
-       }
-    
-    
+                    if let documents = querySnapshot?.documents, !documents.isEmpty {
+                        // 同じ名前の友達が存在する場合、アラートを表示
+                        self.alreadyName()
+                    } else {
+                        // 同じ名前の友達が存在しない場合、データを保存
+                        self.uploadImageToFirebaseStorage(image: selectImage) { imageUrl in
+                            let userData = [
+                                "name": name,
+                                "note": noteText,
+                                "date": self.formattedDate,
+                                "imageUrl": imageUrl
+                            ]
+
+                            friendProfileCollectionRef.addDocument(data: userData) { error in
+                                if let error = error {
+                                    print("データを保存できませんでした: \(error.localizedDescription)")
+                                } else {
+                                    print("データが正常に保存されました")
+
+                                    // 画面を閉じるなどの追加の処理を行うことができます
+                                    self.dismiss(animated: true, completion: nil)
+                                    UserDefaults.standard.removeObject(forKey: "dateSelected")
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                print("ユーザーがログインしていません")
+            }
+        } else {
+            alert()
+        }
+    }
     
     
     

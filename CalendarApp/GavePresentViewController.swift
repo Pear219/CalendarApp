@@ -1,29 +1,29 @@
 //
-//  GivenPresentListViewController.swift
+//  GavePresentViewController.swift
 //  CalendarApp
 //
-//  Created by 加藤 on 2023/09/04.
+//  Created by 加藤 on 2023/09/05.
 //
 
 import UIKit
 import Firebase
 import FirebaseStorage
 
-class GivenPresentViewController: UIViewController, UIImagePickerControllerDelegate & UINavigationControllerDelegate {
+class GavePresentViewController: UIViewController, UIImagePickerControllerDelegate & UINavigationControllerDelegate {
     
-    @IBOutlet weak var givenBy: UITextField!
-    @IBOutlet weak var presentName: UITextField!
-    @IBOutlet weak var datePicker: UIDatePicker!
+    @IBOutlet weak var toGive: UITextField!
     @IBOutlet weak var note: UITextView!
     @IBOutlet weak var photo: UIImageView!
+    @IBOutlet weak var presentName: UITextField!
     @IBOutlet weak var selectButton: UIButton!
+    @IBOutlet weak var datePicker: UIDatePicker!
+
+    let UD: UserDefaults = UserDefaults.standard
     
     var formattedDate: String = ""
     let fireStore = Firestore.firestore()
     let storage = Storage.storage()
     
-    var UD: UserDefaults = UserDefaults.standard
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -35,7 +35,7 @@ class GivenPresentViewController: UIViewController, UIImagePickerControllerDeleg
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy年MM月dd日"
             formattedDate = dateFormatter.string(from: selectedDate)
-            UD.set("日付は入力された", forKey: "givenDateSelected")
+            UD.set("日付は入力された", forKey: "gaveDateSelected")
         }
     
     @IBAction func selectPhoto() {
@@ -92,12 +92,11 @@ class GivenPresentViewController: UIViewController, UIImagePickerControllerDeleg
         present(alert, animated: true, completion: nil)
     }
     
-    
     @IBAction func close() {
-        if let name = givenBy.text, !name.isEmpty,
+        if let name = toGive.text, !name.isEmpty,
             let presentName = presentName.text, !presentName.isEmpty,
             let noteText = note.text, !noteText.isEmpty,
-            let selectedDate = UD.object(forKey: "givenDateSelected") as? String, !selectedDate.isEmpty,
+            let selectedDate = UD.object(forKey: "gaveDateSelected") as? String, !selectedDate.isEmpty,
             let selectImage = photo.image { // formattedDateが空でないことを確認
 
             uploadImageToFirebaseStorage(image: selectImage) { imageUrl in
@@ -111,13 +110,13 @@ class GivenPresentViewController: UIViewController, UIImagePickerControllerDeleg
                             print("データの取得に失敗しました: \(error.localizedDescription)")
                         } else if let documents = snapshot?.documents, !documents.isEmpty {
                             // 同じ名前の友達が存在する場合
-                            if let friendUID = documents[0].documentID as? String{
+                            if let friendUID = documents[0].documentID as? String {
                                 // friendUIDを使用してgivenPresentコレクションを作成
-                                let givenPresentCollectionRef = friendProfileCollectionRef.document(friendUID).collection("givenPresent")
+                                let givenPresentCollectionRef = friendProfileCollectionRef.document(friendUID).collection("gavePresent")
 
                                 // 以降のデータ保存ロジックはそのまま
                                 let userData = [
-                                    "givenBy": name,
+                                    "toGive": name,
                                     "presentName": presentName,
                                     "note": noteText,
                                     "date": self.formattedDate,
@@ -132,7 +131,7 @@ class GivenPresentViewController: UIViewController, UIImagePickerControllerDeleg
 
                                         // 画面を閉じるなどの追加の処理を行うことができます
                                         self.dismiss(animated: true, completion: nil)
-                                        UserDefaults.standard.removeObject(forKey: "givenDateSelected")
+                                        UserDefaults.standard.removeObject(forKey: "gaveDateSelected")
                                     }
                                 }
                             }
@@ -150,9 +149,6 @@ class GivenPresentViewController: UIViewController, UIImagePickerControllerDeleg
             alert()
         }
     }
-
-    
-    
 
     /*
     // MARK: - Navigation
