@@ -9,14 +9,58 @@ import UIKit
 import Firebase
 
 class AddScheduleViewController: UIViewController {
+
+    var userUID: String? //一時的
     
     @IBOutlet weak var titleText: UITextField!
     @IBOutlet weak var schedule: UIDatePicker!
+    @IBOutlet weak var closeButton: UIButton!
     
     var formatDate: String = ""
 
     var UD: UserDefaults = UserDefaults.standard
     let fireStore = Firestore.firestore()
+    
+    override func viewWillAppear(_ animated: Bool) {
+        
+        let selectedDate = UD.object(forKey: "date")
+        
+        if let userUID = self.userUID {
+            closeButton.isHidden = false
+            
+            let fireStore = Firestore.firestore()
+                    let scheduleCollection = fireStore.collection("user").document(userUID).collection("schedule")
+                    
+                    scheduleCollection.whereField("date", isEqualTo: selectedDate).getDocuments { (querySnapshot, error) in
+                        if let error = error {
+                            print("データ取得エラー: \(error.localizedDescription)")
+                            return
+                        }
+                        
+                        guard let documents = querySnapshot?.documents else {
+                            print("該当するドキュメントがありません")
+                            return
+                        }
+                        
+                        self.schedule.date = selectedDate as! Date
+                    }
+                
+//                // ここにDatePickerの初期値を設定するコードを追加
+//                if let date = datePicker.date {
+//                    let dateFormatter = DateFormatter()
+//                    dateFormatter.dateFormat = "yyyy年MM月dd日"
+//                    let dateString = dateFormatter.string(from: date)
+//                    
+//                    if let selectedDate = selectedDate, selectedDate == dateString {
+//                        // 選択した日付と一致する場合、DatePickerに設定
+//                        datePicker.date = date
+//                    }
+//                }
+        } else {
+            closeButton.isHidden = true
+        }
+        
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -32,6 +32,8 @@ class AddProfileViewController: UIViewController, UIImagePickerControllerDelegat
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        //画面が読み込まれた時
+        //datepickerのところに初期値が設定されてある、titleがすでに入力済み
        
     }
     

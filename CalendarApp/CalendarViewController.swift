@@ -55,6 +55,14 @@ class CalendarViewController: UIViewController, FSCalendarDelegate, FSCalendarDa
             if let sheet = next.sheetPresentationController {
                 sheet.detents = [.medium()]
             }
+        } else if segue.identifier == "toAlreadySelected" {
+            let next = segue.destination
+            if let sheet = next.sheetPresentationController {
+                sheet.detents = [.medium()]
+            }
+            if let addScheduleViewController = segue.destination as? AddScheduleViewController, let userUID = sender as? String {
+                        addScheduleViewController.userUID = userUID
+                    }
         }
     }
     
@@ -105,6 +113,7 @@ class CalendarViewController: UIViewController, FSCalendarDelegate, FSCalendarDa
                 
                 // Firestoreからスケジュールを取得
                 fetchScheduleForSelectedDate(selectedDate: selectedDate)
+        UD.set(selectedDate, forKey: "date")
     }
     
     func calendar(_ calendar: FSCalendar, didDeselect date: Date, at monthPosition: FSCalendarMonthPosition) {
@@ -127,6 +136,23 @@ class CalendarViewController: UIViewController, FSCalendarDelegate, FSCalendarDa
             cell.textLabel?.text = schedules[indexPath.row]
             return cell
         }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+           // テーブルビュー内の行が選択されたときの処理
+           
+//           // FirebaseからユーザーのUIDがあるかどうか確認
+//           guard let userUID = Auth.auth().currentUser?.uid else {
+//               // ユーザーが認証されていない場合の処理を行います
+//               return
+//           }
+           
+        let user = Auth.auth().currentUser // 現在のユーザーを取得
+        if let userUID = user?.uid { //uidを取得した後
+            // UIDを次のビューコントローラーに渡す
+            self.performSegue(withIdentifier: "toAlreadySelected", sender: userUID)
+        }
+//        let selectedSchedule = schedules[indexPath.row]
+       }
 
     func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, eventColorFor date: Date) -> UIColor? {
         // カレンダーの日付に表示されるイベントの色を設定する処理
