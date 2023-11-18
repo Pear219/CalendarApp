@@ -17,8 +17,112 @@ class PresentListViewController: UIViewController, UITableViewDelegate, UITableV
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "presentCell", for: indexPath)
                 cell.textLabel?.text = names[indexPath.row]
+                // セルにタップ ジェスチャ レコグナイザを追加
+                let tapGesture = UITapGestureRecognizer(target: self, action: #selector(cellTapped))
+                cell.addGestureRecognizer(tapGesture)
+
+                // セルを識別するためにタグを割り当てる
+                cell.tag = indexPath.row
+
                 return cell
             }
+
+    @objc func cellTapped(sender: UITapGestureRecognizer) {
+        // タップされたセルのタグを取得して対応するインデックスを得る
+        guard let index = sender.view?.tag else { return }
+
+        // 選択されたセグメントを確認
+        switch segmentControl.selectedSegmentIndex {
+        case 0:
+            // Case 0: 1番目のセグメントのデータを処理
+            if let selectedFriendName = UserDefaults.standard.string(forKey: "selectedFriendName"),
+               let currentUserUID = Auth.auth().currentUser?.uid {
+                let db = Firestore.firestore()
+
+                db.collection("user").document(currentUserUID).collection("friendProfile").whereField("name", isEqualTo: selectedFriendName).getDocuments { (querySnapshot, error) in
+                    if let error = error {
+                        print("データの取得に失敗しました: \(error.localizedDescription)")
+                        return
+                    }
+
+                    guard let documents = querySnapshot?.documents, let friendProfileDocument = documents.first else {
+                        print("友達が見つかりませんでした")
+                        return
+                    }
+
+                    let friendProfileID = friendProfileDocument.documentID
+
+                    db.collection("user").document(currentUserUID).collection("friendProfile").document(friendProfileID).collection("gavePresent").getDocuments { (querySnapshot, error) in
+                        if let error = error {
+                            print("データの取得に失敗しました: \(error.localizedDescription)")
+                            return
+                        }
+
+                        if let presentData = querySnapshot?.documents[index].data() {
+                            // Case 0用にUserDefaultsに関連するデータを保存
+                            self.UD.set(presentData["date"], forKey: "selectedDate")
+                            self.UD.set(presentData["toGive"], forKey: "selectedToGive")
+                            self.UD.set(presentData["imageUrl"], forKey: "selectedImageUrl")
+                            self.UD.set(presentData["note"], forKey: "selectedNote")
+                            self.UD.set(presentData["presentName"], forKey: "selectedPresentName")
+
+                            // 例: 保存されたデータを表示
+                            print("Case 0の選択データ:", presentData)
+                            self.performSegue(withIdentifier: "toGive", sender: self)
+                            self.UD.set("toGiveSelected", forKey: "toGiveSelected")
+                        }
+                    }
+                }
+            }
+
+        case 1:
+            // Case 1: 2番目のセグメントのデータを処理
+            if let selectedFriendName = UserDefaults.standard.string(forKey: "selectedFriendName"),
+               let currentUserUID = Auth.auth().currentUser?.uid {
+                let db = Firestore.firestore()
+
+                db.collection("user").document(currentUserUID).collection("friendProfile").whereField("name", isEqualTo: selectedFriendName).getDocuments { (querySnapshot, error) in
+                    if let error = error {
+                        print("データの取得に失敗しました: \(error.localizedDescription)")
+                        return
+                    }
+
+                    guard let documents = querySnapshot?.documents, let friendProfileDocument = documents.first else {
+                        print("友達が見つかりませんでした")
+                        return
+                    }
+
+                    let friendProfileID = friendProfileDocument.documentID
+
+                    db.collection("user").document(currentUserUID).collection("friendProfile").document(friendProfileID).collection("givenPresent").getDocuments { (querySnapshot, error) in
+                        if let error = error {
+                            print("データの取得に失敗しました: \(error.localizedDescription)")
+                            return
+                        }
+
+                        if let presentData = querySnapshot?.documents[index].data() {
+                            // Case 1用にUserDefaultsに関連するデータを保存
+                            self.UD.set(presentData["date"], forKey: "selectedDate")
+                            self.UD.set(presentData["givenBy"], forKey: "selectedGivenBy")
+                            self.UD.set(presentData["imageUrl"], forKey: "selectedImageUrl")
+                            self.UD.set(presentData["note"], forKey: "selectedNote")
+                            self.UD.set(presentData["presentName"], forKey: "selectedPresentName")
+
+                            // 例: 保存されたデータを表示
+                            print("Case 1の選択データ:", presentData)
+                            self.performSegue(withIdentifier: "toGiven", sender: self)
+                            self.UD.set("toGivenSelected", forKey: "toGivenSelected")
+                        }
+                    }
+                }
+            }
+
+        default:
+            break
+        }
+
+        // ここで追加のアクションやナビゲーションを実行
+    }
     
     @IBOutlet weak var segmentControl: UISegmentedControl!
     @IBOutlet weak var tableView: UITableView!
@@ -28,10 +132,9 @@ class PresentListViewController: UIViewController, UITableViewDelegate, UITableV
     // データを取得できた場合、TableViewに表示するためのデータを取り出します
     var names: [String] = []
     
+    var UD: UserDefaults = UserDefaults.standard
+    
     override func viewDidLoad() {
-        
-        
-        
         // 画面がロードされたときにセグメントコントロールを選択
             segmentControl.selectedSegmentIndex = 0
             // actionSegmentedControlメソッドを呼び出す
@@ -225,11 +328,7 @@ class PresentListViewController: UIViewController, UITableViewDelegate, UITableV
         
            }
     
-    //一時的にメモ
-//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//
-//        return cell
-//    }
+    
     
     }
     

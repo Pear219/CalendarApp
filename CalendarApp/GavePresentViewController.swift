@@ -9,7 +9,7 @@ import UIKit
 import Firebase
 import FirebaseStorage
 
-class GavePresentViewController: UIViewController, UIImagePickerControllerDelegate & UINavigationControllerDelegate {
+class GavePresentViewController: UIViewController, UIImagePickerControllerDelegate & UINavigationControllerDelegate, UITextFieldDelegate, UITextViewDelegate {
     
     @IBOutlet weak var toGive: UITextField!
     @IBOutlet weak var note: UITextView!
@@ -18,6 +18,9 @@ class GavePresentViewController: UIViewController, UIImagePickerControllerDelega
     @IBOutlet weak var selectButton: UIButton!
     @IBOutlet weak var datePicker: UIDatePicker!
 
+    @IBOutlet weak var saveButton: UIButton!
+    @IBOutlet weak var closeButton: UIButton!
+    
     let UD: UserDefaults = UserDefaults.standard
     
     var formattedDate: String = ""
@@ -26,8 +29,80 @@ class GavePresentViewController: UIViewController, UIImagePickerControllerDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        toGive.delegate = self
+        note.delegate = self
+        presentName.delegate = self
+        // UIDatePickerのイベントを設定
+        datePicker.addTarget(self, action: #selector(datePickerValueChanged(_:)), for: .valueChanged)
 
         // Do any additional setup after loading the view.
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        saveButton.isHidden = true
+        closeButton.isHidden = false
+        isModalInPresentation = true
+        if UD.object(forKey: "toGiveSelected") != nil {
+            if let toGive = UD.object(forKey: "selectedToGive") as? String {
+                self.toGive.text = toGive
+            }
+            if let note = UD.object(forKey: "selectedNote") as? String{
+                self.note.text = note
+            }
+            if let imageURL = UD.object(forKey: "selectedImageUrl") as? String {
+//                 Firebase Storageから画像をダウンロード
+                    let storageRef = self.storage.reference(forURL: imageURL)
+                    storageRef.getData(maxSize: 1 * 1024 * 1024) { [weak self] (data, error) in
+                        if let error = error {
+                            print("Error downloading image: \(error.localizedDescription)")
+                        } else {
+                            // ダウンロード成功時に画像を表示
+                            if let data = data, let image = UIImage(data: data) {
+                                self?.photo.image = image
+                            }
+                        }
+                    }
+            }
+            if let presentName = UD.object(forKey: "selectedPresentName") as? String {
+                self.presentName.text = presentName
+            }
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy年MM月dd日"
+            if let datePicker = UD.object(forKey: "selectedDate") as? String {
+                if let date = dateFormatter.date(from: datePicker) {
+                    self.datePicker.setDate(date, animated: true)
+                }
+            }
+        } else {
+            toGive.text = ""
+            note.text = ""
+            photo.image = nil
+            presentName.text = ""
+        }
+    }
+    
+    // UITextFieldのテキストが変更されたときに呼ばれるメソッド
+        func textFieldDidChangeSelection(_ textField: UITextField) {
+            saveButton.isHidden = false
+            closeButton.isHidden = true
+        }
+
+        // UITextViewのテキストが変更されたときに呼ばれるメソッド
+        func textViewDidChange(_ textView: UITextView) {
+            saveButton.isHidden = false
+            closeButton.isHidden = true
+        }
+
+        // UIDatePickerの値が変更されたときに呼ばれるメソッド
+        @objc func datePickerValueChanged(_ sender: UIDatePicker) {
+            saveButton.isHidden = false
+            closeButton.isHidden = true
+        }
+    
+    @IBAction func imageChanged() {
+        saveButton.isHidden = false
+        closeButton.isHidden = true
     }
     
     @IBAction func dateSelected(_ sender: UIDatePicker) {
@@ -92,62 +167,136 @@ class GavePresentViewController: UIViewController, UIImagePickerControllerDelega
         present(alert, animated: true, completion: nil)
     }
     
-    @IBAction func close() {
-        if let name = toGive.text, !name.isEmpty,
-            let presentName = presentName.text, !presentName.isEmpty,
-            let noteText = note.text, !noteText.isEmpty,
-            let selectedDate = UD.object(forKey: "gaveDateSelected") as? String, !selectedDate.isEmpty,
-            let selectImage = photo.image { // formattedDateが空でないことを確認
+    @IBAction func save() {
+        if UD.object(forKey: "toGiveSelected") != nil {
+            if let name = toGive.text, !name.isEmpty,
+                let presentName = presentName.text, !presentName.isEmpty,
+                let noteText = note.text, !noteText.isEmpty {
 
-            uploadImageToFirebaseStorage(image: selectImage) { imageUrl in
-                if let currentUserUID = Auth.auth().currentUser?.uid {
-                    // Firestoreにデータを保存する前にfriendProfile内のnameとの比較を行う
-                    let userDocRef = self.fireStore.collection("user").document(currentUserUID)
-                    let friendProfileCollectionRef = userDocRef.collection("friendProfile")
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy年MM月dd日"
+                let formattedDate = dateFormatter.string(from: datePicker.date)
 
-                    friendProfileCollectionRef.whereField("name", isEqualTo: name).getDocuments { (snapshot, error) in
-                        if let error = error {
-                            print("データの取得に失敗しました: \(error.localizedDescription)")
-                        } else if let documents = snapshot?.documents, !documents.isEmpty {
-                            // 同じ名前の友達が存在する場合
-                            if let friendUID = documents[0].documentID as? String {
-                                // friendUIDを使用してgivenPresentコレクションを作成
-                                let givenPresentCollectionRef = friendProfileCollectionRef.document(friendUID).collection("gavePresent")
+                // 画像のアップロード
+                if let selectImage = photo.image {
+                    uploadImageToFirebaseStorage(image: selectImage) { imageUrl in
+                        if let currentUserUID = Auth.auth().currentUser?.uid {
+                            let userDocRef = self.fireStore.collection("user").document(currentUserUID)
+                            let friendProfileCollectionRef = userDocRef.collection("friendProfile")
 
-                                // 以降のデータ保存ロジックはそのまま
-                                let userData = [
-                                    "toGive": name,
-                                    "presentName": presentName,
-                                    "note": noteText,
-                                    "date": self.formattedDate,
-                                    "imageUrl": imageUrl
-                                ]
+                            friendProfileCollectionRef.whereField("name", isEqualTo: name).getDocuments { (snapshot, error) in
+                                if let error = error {
+                                    print("データの取得に失敗しました: \(error.localizedDescription)")
+                                } else if let documents = snapshot?.documents, !documents.isEmpty {
+                                    // 同じ名前の友達が存在する場合
+                                    if let friendUID = documents[0].documentID as? String {
+                                        let givenPresentCollectionRef = friendProfileCollectionRef.document(friendUID).collection("gavePresent")
 
-                                givenPresentCollectionRef.addDocument(data: userData) { error in
-                                    if let error = error {
-                                        print("データを保存できませんでした: \(error.localizedDescription)")
-                                    } else {
-                                        print("データが正常に保存されました")
+                                        // 既存のドキュメントを新しい値で更新
+                                        givenPresentCollectionRef.whereField("toGive", isEqualTo: name).getDocuments { (snapshot, error) in
+                                            if let error = error {
+                                                print("データの取得に失敗しました: \(error.localizedDescription)")
+                                            } else if let documents = snapshot?.documents, !documents.isEmpty {
+                                                let documentID = documents[0].documentID
+                                                let updatedData = [
+                                                    "toGive": name,
+                                                    "presentName": presentName,
+                                                    "note": noteText,
+                                                    "date": formattedDate,
+                                                    "imageUrl": imageUrl
+                                                    // 必要なら他のフィールドも追加
+                                                ]
 
-                                        // 画面を閉じるなどの追加の処理を行うことができます
-                                        self.dismiss(animated: true, completion: nil)
-                                        UserDefaults.standard.removeObject(forKey: "gaveDateSelected")
+                                                givenPresentCollectionRef.document(documentID).setData(updatedData, merge: true) { error in
+                                                    if let error = error {
+                                                        print("データを更新できませんでした: \(error.localizedDescription)")
+                                                    } else {
+                                                        print("データが正常に更新されました")
+
+                                                        // 画面を閉じるなどの追加の処理を行うことができます
+                                                        self.dismiss(animated: true, completion: nil)
+                                                        self.UD.removeObject(forKey: "toGiveSelected")
+                                                    }
+                                                }
+                                            }
+                                        }
                                     }
+                                } else {
+                                    // 同じ名前の友達が存在しない場合、アラートを表示
+                                    print("該当する表示なし")
+                                    self.noUser()
                                 }
                             }
                         } else {
-                            // 同じ名前の友達が存在しない場合、アラートを表示
-                          print("該当する表示なし")
-                            self.noUser()
+                            print("ユーザーがログインしていません")
                         }
                     }
                 } else {
-                    print("ユーザーがログインしていません")
+                    alert()
                 }
             }
         } else {
-            alert()
+            if let name = toGive.text, !name.isEmpty,
+                let presentName = presentName.text, !presentName.isEmpty,
+                let noteText = note.text, !noteText.isEmpty,
+                let selectedDate = UD.object(forKey: "gaveDateSelected") as? String, !selectedDate.isEmpty,
+                let selectImage = photo.image { // formattedDateが空でないことを確認
+
+                uploadImageToFirebaseStorage(image: selectImage) { imageUrl in
+                    if let currentUserUID = Auth.auth().currentUser?.uid {
+                        // Firestoreにデータを保存する前にfriendProfile内のnameとの比較を行う
+                        let userDocRef = self.fireStore.collection("user").document(currentUserUID)
+                        let friendProfileCollectionRef = userDocRef.collection("friendProfile")
+
+                        friendProfileCollectionRef.whereField("name", isEqualTo: name).getDocuments { (snapshot, error) in
+                            if let error = error {
+                                print("データの取得に失敗しました: \(error.localizedDescription)")
+                            } else if let documents = snapshot?.documents, !documents.isEmpty {
+                                // 同じ名前の友達が存在する場合
+                                if let friendUID = documents[0].documentID as? String{
+                                    // friendUIDを使用してgivenPresentコレクションを作成
+                                    let givenPresentCollectionRef = friendProfileCollectionRef.document(friendUID).collection("gavePresent")
+
+                                    // 以降のデータ保存ロジックはそのまま
+                                    let userData = [
+                                        "toGive": name,
+                                        "presentName": presentName,
+                                        "note": noteText,
+                                        "date": self.formattedDate,
+                                        "imageUrl": imageUrl
+                                    ]
+
+                                    givenPresentCollectionRef.addDocument(data: userData) { error in
+                                        if let error = error {
+                                            print("データを保存できませんでした: \(error.localizedDescription)")
+                                        } else {
+                                            print("データが正常に保存されました")
+
+                                            // 画面を閉じるなどの追加の処理を行うことができます
+                                            self.dismiss(animated: true, completion: nil)
+                                            UserDefaults.standard.removeObject(forKey: "gaveDateSelected")
+                                        }
+                                    }
+                                }
+                            } else {
+                                // 同じ名前の友達が存在しない場合、アラートを表示
+                              print("該当する表示なし")
+                                self.noUser()
+                            }
+                        }
+                    } else {
+                        print("ユーザーがログインしていません")
+                    }
+                }
+            } else {
+                alert()
+            }
         }
+    }
+    
+    @IBAction func close() {
+        self.dismiss(animated: true, completion: nil)
+        self.UD.removeObject(forKey: "toGiveSelected")
     }
 
     /*

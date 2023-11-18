@@ -30,6 +30,16 @@ class CalendarViewController: UIViewController, FSCalendarDelegate, FSCalendarDa
         tableView.dataSource = self
         
         super.viewDidLoad()
+        
+        
+        // 影の設定
+        tableView.layer.shadowRadius = 3
+        tableView.layer.shadowOpacity = 0.1
+        tableView.layer.shadowColor = UIColor.black.cgColor
+        tableView.layer.shadowOffset = CGSize(width: 2, height: 2)
+        
+        tableView.layer.masksToBounds = false
+        
 
         // Do any additional setup after loading the view.
     }
@@ -86,18 +96,42 @@ class CalendarViewController: UIViewController, FSCalendarDelegate, FSCalendarDa
                     
                     // スケジュールを保持する配列をクリア
                     self.schedules.removeAll()
-                    
                     // 取得したスケジュールを直接テーブルビューに表示
-                    var scheduleTitles: [String] = []
                     for document in documents {
                         if let title = document.data()["title"] as? String {
-                            scheduleTitles.append(title)
+                            self.schedules.append(title)
+                            self.UD.set(title, forKey: "title") //次の画面遷移用
                         }
                     }
-                    self.schedules = scheduleTitles
-                    
                     // テーブルビューをリロードして表示を更新
                     self.tableView.reloadData()
+                }
+                let friendBirthCollection = fireStore.collection("user").document(userUID).collection("friendProfile")
+                friendBirthCollection.whereField("date", isEqualTo: selectedDate).getDocuments { (querySnapshot, error) in
+                    if let error = error {
+                        print("データ取得エラー:\(error.localizedDescription)")
+                        return
+                    }
+                    
+                    guard let documents = querySnapshot?.documents else {
+                        print("該当するドキュメントがありません")
+                        return
+                    }
+                    
+                    // 誕生日の人を保持する配列をクリア
+                    self.birthdays.removeAll()
+                                
+                    // 取得した誕生日の人を直接テーブルビューに表示
+                    for document in documents {
+                        if let name = document.data()["name"] as? String {
+                            self.birthdays.append(name)
+                        }
+                    }
+                                
+                    // テーブルビューをリロードして表示を更新
+                    self.tableView.reloadData()
+                    print("予定は",[self.schedules])
+                    print("誕生日の人は",[self.birthdays])
                 }
             }
         }
@@ -113,7 +147,7 @@ class CalendarViewController: UIViewController, FSCalendarDelegate, FSCalendarDa
                 
                 // Firestoreからスケジュールを取得
                 fetchScheduleForSelectedDate(selectedDate: selectedDate)
-        UD.set(selectedDate, forKey: "date")
+        UD.set(selectedDate, forKey: "date") //選択した日付を保存
     }
     
     func calendar(_ calendar: FSCalendar, didDeselect date: Date, at monthPosition: FSCalendarMonthPosition) {
@@ -128,29 +162,39 @@ class CalendarViewController: UIViewController, FSCalendarDelegate, FSCalendarDa
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-            return schedules.count
+        return schedules.count + birthdays.count
         }
         
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
             let cell = tableView.dequeueReusableCell(withIdentifier: "CellIdentifier", for: indexPath)
-            cell.textLabel?.text = schedules[indexPath.row]
+        
+            let schedule = indexPath.row < schedules.count ? schedules[indexPath.row] : ""
+            let birthday = indexPath.row < birthdays.count ? birthdays[indexPath.row] : ""
+
+            cell.textLabel?.text = "\(schedule) \(birthday)"
             return cell
         }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-           // テーブルビュー内の行が選択されたときの処理
-           
-//           // FirebaseからユーザーのUIDがあるかどうか確認
-//           guard let userUID = Auth.auth().currentUser?.uid else {
-//               // ユーザーが認証されていない場合の処理を行います
-//               return
-//           }
-           
         let user = Auth.auth().currentUser // 現在のユーザーを取得
-        if let userUID = user?.uid { //uidを取得した後
-            // UIDを次のビューコントローラーに渡す
-            self.performSegue(withIdentifier: "toAlreadySelected", sender: userUID)
-        }
+        let userUID = user?.uid
+        if indexPath.row < schedules.count {
+                // ユーザーが押したセルがscheduleコレクションのものである場合
+                let selectedSchedule = schedules[indexPath.row]
+                print("Selected Schedule: \(selectedSchedule)")
+                // ここで適切な処理を実行する
+                self.performSegue(withIdentifier: "toAlreadySelected", sender: userUID)
+                UD.set("alreadySet", forKey: "alreadySet")
+            } else {
+                // ユーザーが押したセルがfriendProfileコレクションのものである場合
+                let friendIndex = indexPath.row - schedules.count
+                let selectedFriendName = birthdays[friendIndex]
+                print("Selected Friend: \(selectedFriendName)")
+                // ここで適切な処理を実行する
+                UD.set(selectedFriendName, forKey: "friendName")
+                self.performSegue(withIdentifier: "toProfile", sender: nil)
+                UD.set("alreadySet", forKey: "alreadySet")
+            }
 //        let selectedSchedule = schedules[indexPath.row]
        }
 
@@ -159,11 +203,22 @@ class CalendarViewController: UIViewController, FSCalendarDelegate, FSCalendarDa
         return UIColor.red // 赤色のイベント
     }
     
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) { //スクロールが始まった時に呼ばれます
+        tableView.layer.masksToBounds = true
+    }
+
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) { //スクロールが終わった時に呼ばれます
+        tableView.layer.masksToBounds = false
+    }
+    
     @IBAction func add() {
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
                
                // 予定を追加するボタン
                let addPlanAction = UIAlertAction(title: "予定を追加する", style: .default) { (action) in
+                   self.UD.removeObject(forKey: "alreadySet")
+                   self.UD.removeObject(forKey: "date")
+                   self.UD.removeObject(forKey: "title")
                    // 予定を追加するボタンが選択されたときの処理
                    self.performSegue(withIdentifier: "toSchedule", sender: self)
                    // ここに予定を追加する処理を書く
@@ -188,13 +243,6 @@ class CalendarViewController: UIViewController, FSCalendarDelegate, FSCalendarDa
                present(alertController, animated: true, completion: nil)
         
            }
-    
-    //一時的にメモ
-//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//
-//        return cell
-//    }
-    
     }
 
 
