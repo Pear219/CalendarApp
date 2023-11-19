@@ -27,6 +27,12 @@ class GavePresentViewController: UIViewController, UIImagePickerControllerDelega
     let fireStore = Firestore.firestore()
     let storage = Storage.storage()
     
+    var originalToGive: String = ""
+    var originalNote: String = ""
+    var originalPhoto: String = ""
+    var originalPresentName: String = ""
+    var originalDate: String = ""
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -46,11 +52,14 @@ class GavePresentViewController: UIViewController, UIImagePickerControllerDelega
         if UD.object(forKey: "toGiveSelected") != nil {
             if let toGive = UD.object(forKey: "selectedToGive") as? String {
                 self.toGive.text = toGive
+                originalToGive = toGive
             }
             if let note = UD.object(forKey: "selectedNote") as? String{
                 self.note.text = note
+                originalNote = note
             }
             if let imageURL = UD.object(forKey: "selectedImageUrl") as? String {
+                originalPhoto = imageURL
 //                 Firebase Storageから画像をダウンロード
                     let storageRef = self.storage.reference(forURL: imageURL)
                     storageRef.getData(maxSize: 1 * 1024 * 1024) { [weak self] (data, error) in
@@ -66,10 +75,12 @@ class GavePresentViewController: UIViewController, UIImagePickerControllerDelega
             }
             if let presentName = UD.object(forKey: "selectedPresentName") as? String {
                 self.presentName.text = presentName
+                originalPresentName = presentName
             }
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy年MM月dd日"
             if let datePicker = UD.object(forKey: "selectedDate") as? String {
+                originalDate = datePicker
                 if let date = dateFormatter.date(from: datePicker) {
                     self.datePicker.setDate(date, animated: true)
                 }
@@ -191,9 +202,14 @@ class GavePresentViewController: UIViewController, UIImagePickerControllerDelega
                                     // 同じ名前の友達が存在する場合
                                     if let friendUID = documents[0].documentID as? String {
                                         let givenPresentCollectionRef = friendProfileCollectionRef.document(friendUID).collection("gavePresent")
-
                                         // 既存のドキュメントを新しい値で更新
-                                        givenPresentCollectionRef.whereField("toGive", isEqualTo: name).getDocuments { (snapshot, error) in
+                                        givenPresentCollectionRef
+                                            .whereField("toGive", isEqualTo: self.originalToGive)
+                                            .whereField("date", isEqualTo: self.originalDate)
+                                            .whereField("imageUrl", isEqualTo: self.originalPhoto)
+                                            .whereField("note", isEqualTo: self.originalNote)
+                                            .whereField("presentName", isEqualTo: self.originalPresentName)
+                                            .getDocuments { (snapshot, error) in
                                             if let error = error {
                                                 print("データの取得に失敗しました: \(error.localizedDescription)")
                                             } else if let documents = snapshot?.documents, !documents.isEmpty {

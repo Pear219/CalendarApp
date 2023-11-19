@@ -26,6 +26,12 @@ class GivenPresentViewController: UIViewController, UIImagePickerControllerDeleg
     let storage = Storage.storage()
     
     var UD: UserDefaults = UserDefaults.standard
+    
+    var originalGivenBy: String = ""
+    var originalPresentName: String = ""
+    var originalDate: String = ""
+    var originalPhoto: String = ""
+    var originalNote: String = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,12 +52,15 @@ class GivenPresentViewController: UIViewController, UIImagePickerControllerDeleg
         if UD.object(forKey: "toGivenSelected") != nil {
             if let givenBy = UD.object(forKey: "selectedGivenBy") as? String {
                 self.givenBy.text = givenBy
+                originalGivenBy = givenBy
             }
             if let note = UD.object(forKey: "selectedNote") as? String{
                 self.note.text = note
+                originalNote = note
             }
             if let imageURL = UD.object(forKey: "selectedImageUrl") as? String {
 //                 Firebase Storageから画像をダウンロード
+                originalPhoto = imageURL
                     let storageRef = self.storage.reference(forURL: imageURL)
                     storageRef.getData(maxSize: 1 * 1024 * 1024) { [weak self] (data, error) in
                         if let error = error {
@@ -66,10 +75,12 @@ class GivenPresentViewController: UIViewController, UIImagePickerControllerDeleg
             }
             if let presentName = UD.object(forKey: "selectedPresentName") as? String {
                 self.presentName.text = presentName
+                originalPresentName = presentName
             }
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy年MM月dd日"
             if let datePicker = UD.object(forKey: "selectedDate") as? String {
+                originalDate = datePicker
                 if let date = dateFormatter.date(from: datePicker) {
                     self.datePicker.setDate(date, animated: true)
                 }
@@ -185,20 +196,25 @@ class GivenPresentViewController: UIViewController, UIImagePickerControllerDeleg
                             let userDocRef = self.fireStore.collection("user").document(currentUserUID)
                             let friendProfileCollectionRef = userDocRef.collection("friendProfile")
 
-                            friendProfileCollectionRef.whereField("name", isEqualTo: name).getDocuments { (snapshot, error) in
+                            friendProfileCollectionRef.whereField("name", isEqualTo: name).getDocuments { (snapshot, error) in //友達毎に分類
                                 if let error = error {
                                     print("データの取得に失敗しました: \(error.localizedDescription)")
-                                } else if let documents = snapshot?.documents, !documents.isEmpty {
+                                } else if let documents = snapshot?.documents, !documents.isEmpty { //名前のドキュメントID
                                     // 同じ名前の友達が存在する場合
-                                    if let friendUID = documents[0].documentID as? String {
-                                        let givenPresentCollectionRef = friendProfileCollectionRef.document(friendUID).collection("givenPresent")
-
+                                    if let friendUID = documents[0].documentID as? String { //frienduidは友達のドキュメントID
+                                        var givenPresentCollectionRef = friendProfileCollectionRef.document(friendUID).collection("givenPresent")
                                         // 既存のドキュメントを新しい値で更新
-                                        givenPresentCollectionRef.whereField("givenBy", isEqualTo: name).getDocuments { (snapshot, error) in
+                                        givenPresentCollectionRef
+                                            .whereField("givenBy", isEqualTo: self.originalGivenBy)
+                                            .whereField("date", isEqualTo: self.originalDate)
+                                            .whereField("imageUrl", isEqualTo: self.originalPhoto)
+                                            .whereField("note", isEqualTo: self.originalNote)
+                                            .whereField("presentName", isEqualTo: self.originalPresentName)
+                                            .getDocuments { (snapshot, error) in
                                             if let error = error {
                                                 print("データの取得に失敗しました: \(error.localizedDescription)")
                                             } else if let documents = snapshot?.documents, !documents.isEmpty {
-                                                let documentID = documents[0].documentID
+                                                let documentID = documents[0].documentID //これを,一致させるやつにしたい
                                                 let updatedData = [
                                                     "givenBy": name,
                                                     "presentName": presentName,
@@ -208,12 +224,11 @@ class GivenPresentViewController: UIViewController, UIImagePickerControllerDeleg
                                                     // 必要なら他のフィールドも追加
                                                 ]
 
-                                                givenPresentCollectionRef.document(documentID).setData(updatedData, merge: true) { error in
+                                                givenPresentCollectionRef.document(documentID).updateData(updatedData){ error in
                                                     if let error = error {
                                                         print("データを更新できませんでした: \(error.localizedDescription)")
                                                     } else {
                                                         print("データが正常に更新されました")
-
                                                         // 画面を閉じるなどの追加の処理を行うことができます
                                                         self.dismiss(animated: true, completion: nil)
                                                         self.UD.removeObject(forKey: "toGivenSelected")
