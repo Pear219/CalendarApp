@@ -77,64 +77,65 @@ class CalendarViewController: UIViewController, FSCalendarDelegate, FSCalendarDa
     }
     
     func fetchScheduleForSelectedDate(selectedDate: String) { //日付の部分が選択された時
-            let fireStore = Firestore.firestore()
-            let user = Auth.auth().currentUser // 現在のユーザーを取得
-            if let userUID = user?.uid {
-                // ランダムなスケジュールドキュメントIDを指定してクエリを作成
-                let scheduleCollection = fireStore.collection("user").document(userUID).collection("schedule")
-                
-                scheduleCollection.whereField("date", isEqualTo: selectedDate).getDocuments { (querySnapshot, error) in
-                    if let error = error {
-                        print("データ取得エラー: \(error.localizedDescription)")
-                        return
-                    }
+                let fireStore = Firestore.firestore()
+                let user = Auth.auth().currentUser // 現在のユーザーを取得
+                if let userUID = user?.uid {
+                    // ランダムなスケジュールドキュメントIDを指定してクエリを作成
+                    let scheduleCollection = fireStore.collection("user").document(userUID).collection("schedule")
                     
-                    guard let documents = querySnapshot?.documents else {
-                        print("該当するドキュメントがありません")
-                        return
-                    }
-                    
-                    // スケジュールを保持する配列をクリア
-                    self.schedules.removeAll()
-                    // 取得したスケジュールを直接テーブルビューに表示
-                    for document in documents {
-                        if let title = document.data()["title"] as? String {
-                            self.schedules.append(title)
-                            self.UD.set(title, forKey: "title") //次の画面遷移用
+                    scheduleCollection.whereField("date", isEqualTo: selectedDate).getDocuments { (querySnapshot, error) in
+                        if let error = error {
+                            print("データ取得エラー: \(error.localizedDescription)")
+                            return
                         }
-                    }
-                    // テーブルビューをリロードして表示を更新
-                    self.tableView.reloadData()
-                }
-                let friendBirthCollection = fireStore.collection("user").document(userUID).collection("friendProfile")
-                friendBirthCollection.whereField("date", isEqualTo: selectedDate).getDocuments { (querySnapshot, error) in
-                    if let error = error {
-                        print("データ取得エラー:\(error.localizedDescription)")
-                        return
-                    }
-                    
-                    guard let documents = querySnapshot?.documents else {
-                        print("該当するドキュメントがありません")
-                        return
-                    }
-                    
-                    // 誕生日の人を保持する配列をクリア
-                    self.birthdays.removeAll()
-                                
-                    // 取得した誕生日の人を直接テーブルビューに表示
-                    for document in documents {
-                        if let name = document.data()["name"] as? String {
-                            self.birthdays.append(name)
+                        
+                        guard let documents = querySnapshot?.documents else {
+                            print("該当するドキュメントがありません")
+                            return
                         }
+                        
+                        // スケジュールを保持する配列をクリア
+                        self.schedules.removeAll()
+                        // 取得したスケジュールを直接テーブルビューに表示
+                        for document in documents {
+                            if let title = document.data()["title"] as? String {
+                                self.schedules.append(title)
+                                print(title,"追加した")
+                                self.UD.set(title, forKey: "title") //次の画面遷移用
+                            }
+                        }
+                        // テーブルビューをリロードして表示を更新
+                        self.tableView.reloadData()
                     }
-                                
-                    // テーブルビューをリロードして表示を更新
-                    self.tableView.reloadData()
-                    print("予定は",[self.schedules])
-                    print("誕生日の人は",[self.birthdays])
-                }
-            }
-        }
+                    let friendBirthCollection = fireStore.collection("user").document(userUID).collection("friendProfile")
+                                    friendBirthCollection.whereField("date", isEqualTo: selectedDate).getDocuments { (querySnapshot, error) in
+                                        if let error = error {
+                                            print("データ取得エラー:\(error.localizedDescription)")
+                                            return
+                                        }
+                                        
+                                        guard let documents = querySnapshot?.documents else {
+                                            print("該当するドキュメントがありません")
+                                            return
+                                        }
+                                        
+                                        // 誕生日の人を保持する配列をクリア
+                                        self.birthdays.removeAll()
+                                                    
+                                        // 取得した誕生日の人を直接テーブルビューに表示
+                                        for document in documents {
+                                            if let name = document.data()["name"] as? String {
+                                                self.birthdays.append(name)
+                                            }
+                                        }
+                                                    
+                                        // テーブルビューをリロードして表示を更新
+                                        self.tableView.reloadData()
+                                        print("予定は",[self.schedules])
+                                        print("誕生日の人は",[self.birthdays])
+                                    }
+                                }
+                            }
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         // カレンダーの日付が選択されたときの処理
@@ -167,11 +168,16 @@ class CalendarViewController: UIViewController, FSCalendarDelegate, FSCalendarDa
         
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
             let cell = tableView.dequeueReusableCell(withIdentifier: "CellIdentifier", for: indexPath)
-        
-            let schedule = indexPath.row < schedules.count ? schedules[indexPath.row] : ""
-            let birthday = indexPath.row < birthdays.count ? birthdays[indexPath.row] : ""
-
-            cell.textLabel?.text = "\(schedule) \(birthday)"
+        // インデックスに基づいてスケジュールまたは誕生日を表示するかを判断
+            if indexPath.row < schedules.count {
+                // スケジュールを表示
+                cell.textLabel?.text = schedules[indexPath.row]
+            } else {
+                // 誕生日を表示
+                let birthdayIndex = indexPath.row - schedules.count
+                cell.textLabel?.text = birthdays[birthdayIndex]
+            }
+            
             return cell
         }
     
@@ -185,6 +191,7 @@ class CalendarViewController: UIViewController, FSCalendarDelegate, FSCalendarDa
                 // ここで適切な処理を実行する
                 self.performSegue(withIdentifier: "toAlreadySelected", sender: userUID)
                 UD.set("alreadySet", forKey: "alreadySet")
+            UD.set(selectedSchedule, forKey: "title")
             } else {
                 // ユーザーが押したセルがfriendProfileコレクションのものである場合
                 let friendIndex = indexPath.row - schedules.count
