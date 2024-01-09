@@ -29,9 +29,9 @@ class CalendarViewController: UIViewController, FSCalendarDelegate, FSCalendarDa
         tableView.delegate = self
         tableView.dataSource = self
         
+        calendar.backgroundColor = UIColor(red: 233/255, green: 245/255, blue: 251/255, alpha: 1.0)
+        
         super.viewDidLoad()
-        
-        
         // 影の設定
         tableView.layer.shadowRadius = 3
         tableView.layer.shadowOpacity = 0.1
@@ -167,7 +167,7 @@ class CalendarViewController: UIViewController, FSCalendarDelegate, FSCalendarDa
         }
         
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "CellIdentifier", for: indexPath)
+            let cell = tableView.dequeueReusableCell(withIdentifier: "CellIdentifer", for: indexPath)
         // インデックスに基づいてスケジュールまたは誕生日を表示するかを判断
             if indexPath.row < schedules.count {
                 // スケジュールを表示
@@ -191,7 +191,7 @@ class CalendarViewController: UIViewController, FSCalendarDelegate, FSCalendarDa
                 // ここで適切な処理を実行する
                 self.performSegue(withIdentifier: "toAlreadySelected", sender: userUID)
                 UD.set("alreadySet", forKey: "alreadySet")
-            UD.set(selectedSchedule, forKey: "title")
+                UD.set(selectedSchedule, forKey: "title")
             } else {
                 // ユーザーが押したセルがfriendProfileコレクションのものである場合
                 let friendIndex = indexPath.row - schedules.count
@@ -207,7 +207,7 @@ class CalendarViewController: UIViewController, FSCalendarDelegate, FSCalendarDa
 
     func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, eventColorFor date: Date) -> UIColor? {
         // カレンダーの日付に表示されるイベントの色を設定する処理
-        return UIColor.red // 赤色のイベント
+        return UIColor(red: 168/255, green: 198/255, blue: 239/255, alpha: 1.0)
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) { //スクロールが始まった時に呼ばれます
@@ -217,7 +217,7 @@ class CalendarViewController: UIViewController, FSCalendarDelegate, FSCalendarDa
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) { //スクロールが終わった時に呼ばれます
         tableView.layer.masksToBounds = false
     }
-    
+
     @IBAction func add() {
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
                

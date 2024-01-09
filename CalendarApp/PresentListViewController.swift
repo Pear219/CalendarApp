@@ -15,8 +15,10 @@ class PresentListViewController: UIViewController, UITableViewDelegate, UITableV
             }
             
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
                 let cell = tableView.dequeueReusableCell(withIdentifier: "presentCell", for: indexPath)
                 cell.textLabel?.text = names[indexPath.row]
+        
                 // セルにタップ ジェスチャ レコグナイザを追加
                 let tapGesture = UITapGestureRecognizer(target: self, action: #selector(cellTapped))
                 cell.addGestureRecognizer(tapGesture)

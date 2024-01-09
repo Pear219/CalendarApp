@@ -7,6 +7,7 @@
 
 import UIKit
 import Firebase
+import FirebaseStorage
 
 class FriendListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
@@ -15,18 +16,27 @@ class FriendListViewController: UIViewController, UITableViewDelegate, UITableVi
         }
         
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-            cell.textLabel?.text = friends[indexPath.row]
-            return cell
+        // 画面が表示されるたびにfriends配列をクリアする(重複して表示されるのを防ぐため)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as! FriendListCell
+            cell.friendName.text = friends[indexPath.row]
+            cell.friendImage.image = friendsImage[indexPath.row]
+        return cell
         }
     
     @IBOutlet weak var tableView: UITableView!
     var friends: [String] = [] // フレンドの名前を格納する配列
     var UD: UserDefaults = UserDefaults.standard
+    
+    var friendsImage: [UIImage] = [] //フレンドのイメージを格納する配列
+    
+    // Firebase Firestoreの参照を取得
+    let fireStore = Firestore.firestore()
+    let storage = Storage.storage()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        tableView.register(UINib(nibName: "FriendListCell", bundle: nil), forCellReuseIdentifier: "customCell")
         tableView.delegate = self
         tableView.dataSource = self
 
@@ -34,8 +44,8 @@ class FriendListViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        // 画面が表示されるたびにfriends配列をクリアする(重複して表示されるのを防ぐため)
         friends.removeAll()
+        friendsImage.removeAll()
         let fireStore = Firestore.firestore()
         if let userUID = Auth.auth().currentUser?.uid {
            let userDocumentRef = fireStore.collection("user").document(userUID)
@@ -49,9 +59,25 @@ class FriendListViewController: UIViewController, UITableViewDelegate, UITableVi
                         if let name = document["name"] as? String {
                             self.friends.append(name)
                         }
+                            if let imageURL = document.data()["imageUrl"] as? String {
+                            print("ImageURL: \(imageURL)")
+                            // 画像のURLを取得
+                            // Firebase Storageから画像をダウンロード
+                                let storageRef = self.storage.reference(forURL: imageURL)
+                                storageRef.getData(maxSize: 1 * 1024 * 1024) { [weak self] (data, error) in
+                                    if let error = error {
+                                        print("Error downloading image: \(error.localizedDescription)")
+                                        } else {
+                                            // ダウンロード成功時に画像を表示
+                                            if let data = data, let image = UIImage(data: data) {
+                                                self?.friendsImage.append(image)
+                                                // テーブルビューを更新
+                                                self?.tableView.reloadData()
+                                            }
+                                        }
+                                }
+                            }
                     }
-                    // テーブルビューを更新
-                       self.tableView.reloadData()
                         print([self.friends])
                     }
                 }
@@ -73,6 +99,11 @@ class FriendListViewController: UIViewController, UITableViewDelegate, UITableVi
             self.navigationController?.pushViewController(presentListVC, animated: true)
         }
     }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+            return 85
+        }
+
 
 
     /*
