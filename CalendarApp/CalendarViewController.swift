@@ -29,7 +29,7 @@ class CalendarViewController: UIViewController, FSCalendarDelegate, FSCalendarDa
         tableView.delegate = self
         tableView.dataSource = self
         
-        calendar.backgroundColor = UIColor(red: 233/255, green: 245/255, blue: 251/255, alpha: 1.0)
+        calendar.backgroundColor = UIColor(red: 244/255, green: 245/255, blue: 247/255, alpha: 1.0)
         
         super.viewDidLoad()
         // 影の設定

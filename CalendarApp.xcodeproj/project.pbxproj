@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4107DD092B06A20B008B72D6 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4107DD082B06A20B008B72D6 /* TabBarViewController.swift */; };
 		415B80062A7D4D1200EC07B1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 415B80052A7D4D1200EC07B1 /* AppDelegate.swift */; };
 		415B80082A7D4D1200EC07B1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 415B80072A7D4D1200EC07B1 /* SceneDelegate.swift */; };
 		415B800D2A7D4D1200EC07B1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 415B800B2A7D4D1200EC07B1 /* Main.storyboard */; };
@@ -33,6 +32,7 @@
 		416461362AA72E7B0082E111 /* GavePresentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 416461352AA72E7B0082E111 /* GavePresentViewController.swift */; };
 		41DFAC032B0CBFE700FDB500 /* FriendListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41DFAC012B0CBFE700FDB500 /* FriendListCell.swift */; };
 		41DFAC042B0CBFE700FDB500 /* FriendListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 41DFAC022B0CBFE700FDB500 /* FriendListCell.xib */; };
+		41FB8DCF2B72404D003ECCAA /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41FB8DCE2B72404D003ECCAA /* TabBarViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,7 +53,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		4107DD082B06A20B008B72D6 /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		415B80022A7D4D1200EC07B1 /* CalendarApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CalendarApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		415B80052A7D4D1200EC07B1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		415B80072A7D4D1200EC07B1 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -77,6 +76,7 @@
 		416461352AA72E7B0082E111 /* GavePresentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GavePresentViewController.swift; sourceTree = "<group>"; };
 		41DFAC012B0CBFE700FDB500 /* FriendListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendListCell.swift; sourceTree = "<group>"; };
 		41DFAC022B0CBFE700FDB500 /* FriendListCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FriendListCell.xib; sourceTree = "<group>"; };
+		41FB8DCE2B72404D003ECCAA /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -148,9 +148,9 @@
 				4164611F2A94CDC50082E111 /* GoogleService-Info.plist */,
 				416461332AA5A9910082E111 /* GivenPresentViewController.swift */,
 				416461352AA72E7B0082E111 /* GavePresentViewController.swift */,
-				4107DD082B06A20B008B72D6 /* TabBarViewController.swift */,
 				41DFAC012B0CBFE700FDB500 /* FriendListCell.swift */,
 				41DFAC022B0CBFE700FDB500 /* FriendListCell.xib */,
+				41FB8DCE2B72404D003ECCAA /* TabBarViewController.swift */,
 			);
 			path = CalendarApp;
 			sourceTree = "<group>";
@@ -320,9 +320,9 @@
 			files = (
 				4164612E2A9DF30D0082E111 /* LoginViewController.swift in Sources */,
 				415B80392A7D515B00EC07B1 /* CalendarViewController.swift in Sources */,
-				4107DD092B06A20B008B72D6 /* TabBarViewController.swift in Sources */,
 				415B80062A7D4D1200EC07B1 /* AppDelegate.swift in Sources */,
 				4164611E2A93F86A0082E111 /* AddScheduleViewController.swift in Sources */,
+				41FB8DCF2B72404D003ECCAA /* TabBarViewController.swift in Sources */,
 				416461302AA4CEF50082E111 /* FriendListViewController.swift in Sources */,
 				416461362AA72E7B0082E111 /* GavePresentViewController.swift in Sources */,
 				41DFAC032B0CBFE700FDB500 /* FriendListCell.swift in Sources */,
